@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.tum.orange.tum_lmt.DeviceListActivity">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/my_toolbar_in_devicelist"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        android:elevation="4dp"
+        app:popupTheme="@style/ToolbarPopupTheme"
+        app:theme="@style/ToolbarTheme" />
+
+
+    <ExpandableListView
+        android:id="@+id/expandable_device_ListView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/my_toolbar_in_devicelist">
+
+    </ExpandableListView>
+</RelativeLayout>

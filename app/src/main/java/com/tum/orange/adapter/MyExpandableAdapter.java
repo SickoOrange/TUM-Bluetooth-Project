@@ -94,7 +94,7 @@ public class MyExpandableAdapter extends BaseExpandableListAdapter {
         TextView device_mac = (TextView) cView.findViewById(R.id.device_mac);
 
         BluetoothDevice device_object = (BluetoothDevice) getChild(groupPosition, childPosition);
-        System.out.println(device_object.getName() + ":::" + device_object.getAddress());
+       // System.out.println(device_object.getName() + ":::" + device_object.getAddress());
         device_name.setText(device_object.getName());
         device_mac.setText(device_object.getAddress());
         return cView;

@@ -1,27 +1,29 @@
 package com.tum.orange.tum_lmt;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentTabHost;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TabHost;
-import android.widget.Toast;
 
 import com.tum.orange.fragment.Fragment_Data;
 import com.tum.orange.fragment.Fragment_Setting;
 
 public class MainActivity extends AppCompatActivity {
+    public static final int REQUEST_DEVICE_INFO = 1001;
     private FragmentTabHost mTabHost;
     private Toolbar my_toolbar;
     private ActionBar actionBar;
+    private Snackbar snackbar;
     public Handler mHandler;
     private int mImages[] = {
             R.drawable.tab_center,
@@ -50,6 +52,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         init_view();
+
 
     }
 
@@ -102,7 +105,7 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_device:
-                startActivity(new Intent(getApplicationContext(), DeviceListActivity.class));
+                startActivityForResult(new Intent(getApplicationContext(), DeviceListActivity.class), REQUEST_DEVICE_INFO);
                 return true;
             default:
                 // If we got here, the user's action was not recognized.
@@ -110,4 +113,43 @@ public class MainActivity extends AppCompatActivity {
                 return super.onOptionsItemSelected(item);
         }
     }
+
+
+    /**
+     * Dispatch incoming device result to the correct fragment
+     * connect the remote Bluetooth device with the incoming device result
+     */
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch (resultCode) {
+            case RESULT_OK:
+                Bundle bundle = data.getExtras();
+                String[] device_infos = bundle.getStringArray("DEVICE_INFO");
+                for (String info : device_infos) {
+                    System.out.println("main activity::" + info);
+                }
+                break;
+            default:
+                break;
+        }
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    @Override
+    public void onBackPressed() {
+        showSnackBar(my_toolbar, "Do you want to finish APP?");
+    }
+
+    private void showSnackBar(View view, String content) {
+        if (snackbar == null) {
+            snackbar = Snackbar.make(view, content, Snackbar.LENGTH_SHORT).setAction("yes", new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    finishAffinity();
+                }
+            });
+        }
+        snackbar.show();
+    }
+
 }

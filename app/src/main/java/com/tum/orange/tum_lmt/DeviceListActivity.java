@@ -15,6 +15,7 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ExpandableListView;
 import android.widget.Toast;
 
@@ -27,7 +28,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-public class DeviceListActivity extends AppCompatActivity {
+public class DeviceListActivity extends AppCompatActivity implements ExpandableListView.OnChildClickListener {
 
     private static final int REQUEST_COARSE_LOCATION_PERMISSIONS = 1000;
     private Toolbar my_toolbar_in_devicelist;
@@ -85,7 +86,7 @@ public class DeviceListActivity extends AppCompatActivity {
 
     private void initView() {
         deviceListView = (ExpandableListView) findViewById(R.id.expandable_device_ListView);
-
+        deviceListView.setOnChildClickListener(this);
     }
 
     private void initData() {
@@ -217,4 +218,17 @@ public class DeviceListActivity extends AppCompatActivity {
     }
 
 
+    @Override
+    public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
+        Object[] objects = deviceMap.get(groupName[groupPosition]).toArray();
+        BluetoothDevice object = (BluetoothDevice) objects[childPosition];
+        System.out.println(object.getName() + "..." + object.getAddress());
+        Intent intent = new Intent();
+        Bundle bundle = new Bundle();
+        bundle.putStringArray("DEVICE_INFO", new String[]{object.getName(), object.getAddress()});
+        intent.putExtras(bundle);
+        setResult(RESULT_OK, intent);
+        finish();
+        return true;
+    }
 }

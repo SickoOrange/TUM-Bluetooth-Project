@@ -1,5 +1,8 @@
 package com.tum.orange.tum_lmt;
 
+import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
+import android.bluetooth.BluetoothSocket;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -15,16 +18,22 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TabHost;
 
+import com.tum.orange.bluetoothmanagement.ConnectThread;
+import com.tum.orange.bluetoothmanagement.ConnectedThread;
 import com.tum.orange.fragment.Fragment_Data;
 import com.tum.orange.fragment.Fragment_Setting;
 
+
 public class MainActivity extends AppCompatActivity {
     public static final int REQUEST_DEVICE_INFO = 1001;
+    String app_UUID = "00001101-0000-1000-8000-00805F9B34FB";
     private FragmentTabHost mTabHost;
     private Toolbar my_toolbar;
     private ActionBar actionBar;
     private Snackbar snackbar;
-    public Handler mHandler;
+    public Handler fragment_data_handler;
+    private ConnectThread mConnectThread;
+    private ConnectedThread mConnectedThread;
     private int mImages[] = {
             R.drawable.tab_center,
             R.drawable.tab_counter,
@@ -36,9 +45,12 @@ public class MainActivity extends AppCompatActivity {
             "0",
             "1",
     };
+    private BluetoothDevice resultDevice;
+    private BluetoothAdapter adapter;
+    private BluetoothSocket btSocket;
 
     public void setHandler(Handler handler) {
-        mHandler = handler;
+        fragment_data_handler = handler;
     }
 
     @Override
@@ -62,7 +74,6 @@ public class MainActivity extends AppCompatActivity {
         actionBar = getSupportActionBar();
         actionBar.setTitle("connecting to bluetooth...");
 
-
         mTabHost = (FragmentTabHost) findViewById(android.R.id.tabhost);
         mTabHost.setup(this, getSupportFragmentManager(), R.id.tabcontent);
         mTabHost.getTabWidget().setDividerDrawable(null); // 去掉分割线
@@ -81,7 +92,7 @@ public class MainActivity extends AppCompatActivity {
                     System.out.println("1被按下了");
                     Message msg = new Message();
                     msg.what = 1;
-                    mHandler.sendMessage(msg);
+                    fragment_data_handler.sendMessage(msg);
                 }
             }
         });
@@ -124,15 +135,25 @@ public class MainActivity extends AppCompatActivity {
         switch (resultCode) {
             case RESULT_OK:
                 Bundle bundle = data.getExtras();
-                String[] device_infos = bundle.getStringArray("DEVICE_INFO");
-                for (String info : device_infos) {
-                    System.out.println("main activity::" + info);
-                }
+                resultDevice = bundle.getParcelable("DEVICE_INFO");
+                System.out.println("main activity::" + resultDevice.getName() + ": " + resultDevice.getAddress());
+                connectToRemoteDevice(resultDevice);
                 break;
             default:
                 break;
         }
         super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    private void connectToRemoteDevice(BluetoothDevice resultDevice) {
+        if (mConnectThread != null) {
+            mConnectThread.cancelConnect();
+            mConnectThread = null;
+        }
+        mConnectThread = new ConnectThread(MainActivity.this, resultDevice, app_UUID, fragment_data_handler);
+        mConnectThread.start();
+
+
     }
 
     @Override
@@ -152,4 +173,10 @@ public class MainActivity extends AppCompatActivity {
         snackbar.show();
     }
 
+    @Override
+    protected void onDestroy() {
+        System.out.println("被销毁了啦");
+        mConnectThread.cancelConnect();
+        super.onDestroy();
+    }
 }

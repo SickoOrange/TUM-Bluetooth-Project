@@ -70,7 +70,7 @@ public class Fragment_Setting extends Fragment {
         super.onAttach(context);
         Log.e("main", "OnAttach2");
         MainActivity mainActivity = (MainActivity) context;
-        handler = mainActivity.mHandler;
+        handler = mainActivity.fragment_data_handler;
     }
 
     @Override

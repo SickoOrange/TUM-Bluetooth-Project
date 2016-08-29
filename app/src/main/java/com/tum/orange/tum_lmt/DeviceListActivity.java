@@ -24,7 +24,6 @@ import com.tum.orange.adapter.MyExpandableAdapter;
 
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -225,7 +224,8 @@ public class DeviceListActivity extends AppCompatActivity implements ExpandableL
         System.out.println(object.getName() + "..." + object.getAddress());
         Intent intent = new Intent();
         Bundle bundle = new Bundle();
-        bundle.putStringArray("DEVICE_INFO", new String[]{object.getName(), object.getAddress()});
+        bundle.putParcelable("DEVICE_INFO", object);
+        // bundle.putStringArray("DEVICE_INFO", new String[]{object.getName(), object.getAddress()});
         intent.putExtras(bundle);
         setResult(RESULT_OK, intent);
         finish();

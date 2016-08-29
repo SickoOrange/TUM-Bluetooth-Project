@@ -8,14 +8,12 @@ import android.content.IntentFilter;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.widget.CursorAdapter;
 import android.widget.Toast;
 
-import java.sql.SQLOutput;
 
 public class LoadingActivity extends AppCompatActivity {
-
-    private static final int REQUEST_ENABLE_BT = 0;
+    //if we use explicit action to turn on Bluetooth, we need this Filed as Reqestcode
+    //private static final int REQUEST_ENABLE_BT = 0;
     private BluetoothAdapter adapter;
 
     @Override
@@ -104,7 +102,6 @@ public class LoadingActivity extends AppCompatActivity {
     private void loading() {
         /**
          *
-
          new Thread(new Runnable() {
         @Override public void run() {
         try {

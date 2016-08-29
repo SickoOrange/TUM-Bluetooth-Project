@@ -15,23 +15,42 @@ import android.widget.TextView;
 import com.tum.orange.tum_lmt.MainActivity;
 import com.tum.orange.tum_lmt.R;
 
+import java.io.IOException;
+import java.io.OutputStream;
+
 /**
  * Created by Orange on 2016/8/22.
  */
 public class Fragment_Data extends Fragment {
     private View mViewContent; // 缓存视图内容
     private TextView tv_data;
+    private String msgfromThread;
+    private OutputStream mOutputStream;
     /**
      * 定义一个handler对象 用于与activity进行交互 此时
      * activity拿到handler的对象 可以发送消息给fragment_data
      */
-    public Handler handler = new Handler() {
+    public Handler fragment_data_handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             if (msg.what == 1) {
                 System.out.println("得到消息");
             } else if (msg.what == 2) {
                 System.out.println("得到消息+22");
+                if (mOutputStream != null) {
+                    try {
+                        mOutputStream.write("hello world".getBytes());
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            } else if (msg.what == 10) {
+                msgfromThread = (String) msg.obj;
+                // System.out.println("recieveMessage from Thread:" + msgfromThread);
+                tv_data.setText("recieveMessage from Thread:" + msgfromThread);
+            } else if (msg.what == 11) {
+                mOutputStream = (OutputStream) msg.obj;
+                System.out.println("从线程中拿到了一个Outputstream:" + mOutputStream.hashCode());
             }
         }
     };
@@ -75,10 +94,9 @@ public class Fragment_Data extends Fragment {
         super.onAttach(context);
         Log.e("main", "OnAttach1");
         mActivity = (MainActivity) context;
-        mActivity.setHandler(handler);
+        mActivity.setHandler(fragment_data_handler);
 
     }
-
 
 
     @Override
@@ -103,6 +121,11 @@ public class Fragment_Data extends Fragment {
     public void onDestroy() {
         super.onDestroy();
         Log.e("main", "onDestroy1");
+        try {
+            mOutputStream.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -111,8 +134,5 @@ public class Fragment_Data extends Fragment {
         Log.e("main", "onDetach1");
     }
 
-    public void printfragment1() {
-        System.out.println("this is fragment1");
-    }
 }
 

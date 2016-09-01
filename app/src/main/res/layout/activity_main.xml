@@ -14,7 +14,8 @@
         android:elevation="4dp"
         android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-        app:titleTextAppearance="@style/ToolbarTitel"/>
+        app:titleTextAppearance="@style/ToolbarTitel"
+        />
 
     <FrameLayout
         android:id="@+id/tabcontent"

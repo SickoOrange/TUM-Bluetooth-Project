@@ -29,7 +29,7 @@ import com.tum.orange.fragment.Fragment_Setting;
 
 public class MainActivity extends AppCompatActivity {
     public static final int REQUEST_DEVICE_INFO = 1001;
-    private static final int CONNECT_DIS =1007 ;
+    private static final int CONNECT_DIS = 1007;
     String app_UUID = "00001101-0000-1000-8000-00805F9B34FB";
     private FragmentTabHost mTabHost;
     private Toolbar my_toolbar;
@@ -82,6 +82,7 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(my_toolbar);
         actionBar = getSupportActionBar();
         actionBar.setTitle("No Connection");
+
 
         mTabHost = (FragmentTabHost) findViewById(android.R.id.tabhost);
         mTabHost.setup(this, getSupportFragmentManager(), R.id.tabcontent);

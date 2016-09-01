@@ -87,7 +87,7 @@ public class Fragment_Data extends Fragment {
         if (mViewContent == null) {
             mViewContent = inflater.inflate(R.layout.fragment_data, null);
             mChart = (LineChart) mViewContent.findViewById(R.id.mChart);
-            btn = (Button) mViewContent.findViewById(R.id.add);
+            // btn = (Button) mViewContent.findViewById(R.id.add);
             mChart.setDescription("Delay");
             mChart.setNoDataTextDescription("暂时尚无数据");
 
@@ -277,17 +277,6 @@ public class Fragment_Data extends Fragment {
     public void onResume() {
         super.onResume();
         Log.e("main", "onResume1");
-        btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                try {
-                    mOutputStream.write("1".getBytes());
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-
-            }
-        });
     }
 
     @Override

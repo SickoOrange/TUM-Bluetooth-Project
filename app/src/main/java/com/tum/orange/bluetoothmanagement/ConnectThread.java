@@ -15,6 +15,9 @@ import java.util.UUID;
  * Created by Orange on 2016/8/29.
  */
 public class ConnectThread extends Thread {
+    private static final int CONNECT_SUCCESSFULLY = 1005;
+    private static final int CONNECT_FAILED = 1006;
+    private static final int CONNECT_REQUEST = 1008;
     private BluetoothDevice device;
     private BluetoothSocket mSocket;
     private MainActivity mActivity;
@@ -43,12 +46,14 @@ public class ConnectThread extends Thread {
         BluetoothAdapter.getDefaultAdapter().cancelDiscovery();
         try {
             System.out.println("正在连接");
+            fragment_data_handler.obtainMessage(CONNECT_REQUEST).sendToTarget();
             mSocket.connect();
             System.out.println("连接成功");
         } catch (IOException e) {
             e.printStackTrace();
             System.out.println("连接失败");
             showConnectStateInMainUI("Connected failed. Can't connect to TargetDevice");
+            fragment_data_handler.obtainMessage(CONNECT_FAILED).sendToTarget();
             //close the socket
             try {
                 mSocket.close();
@@ -59,9 +64,10 @@ public class ConnectThread extends Thread {
             return;
         }
         System.out.println("连接成功+1");
+        fragment_data_handler.obtainMessage(CONNECT_SUCCESSFULLY, mSocket.getRemoteDevice()).sendToTarget();
         showConnectStateInMainUI("Connected Successfully");
         //start the connected Thread for listening the inputStream and send message to target device
-        connectedThread = new ConnectedThread(mSocket,fragment_data_handler);
+        connectedThread = new ConnectedThread(mSocket, fragment_data_handler);
         connectedThread.start();
     }
 

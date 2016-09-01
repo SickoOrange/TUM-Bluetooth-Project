@@ -3,7 +3,10 @@ package com.tum.orange.tum_lmt;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -26,6 +29,7 @@ import com.tum.orange.fragment.Fragment_Setting;
 
 public class MainActivity extends AppCompatActivity {
     public static final int REQUEST_DEVICE_INFO = 1001;
+    private static final int CONNECT_DIS =1007 ;
     String app_UUID = "00001101-0000-1000-8000-00805F9B34FB";
     private FragmentTabHost mTabHost;
     private Toolbar my_toolbar;
@@ -40,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
     };
     private Class[] aClass = {Fragment_Data.class, Fragment_Setting.class};
 
-    // 标题
+    // Fragment Tag
     private String mFragmentTags[] = {
             "0",
             "1",
@@ -64,6 +68,11 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         init_view();
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(BluetoothDevice.ACTION_ACL_CONNECTED);
+        filter.addAction(BluetoothDevice.ACTION_ACL_DISCONNECTED);
+        filter.addAction(BluetoothDevice.ACTION_ACL_DISCONNECT_REQUESTED);
+        registerReceiver(connectStateReceiver, filter);
 
 
     }
@@ -72,7 +81,7 @@ public class MainActivity extends AppCompatActivity {
         my_toolbar = (Toolbar) findViewById(R.id.my_toolbar);
         setSupportActionBar(my_toolbar);
         actionBar = getSupportActionBar();
-        actionBar.setTitle("connecting to bluetooth...");
+        actionBar.setTitle("No Connection");
 
         mTabHost = (FragmentTabHost) findViewById(android.R.id.tabhost);
         mTabHost.setup(this, getSupportFragmentManager(), R.id.tabcontent);
@@ -176,7 +185,33 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         System.out.println("被销毁了啦");
-        mConnectThread.cancelConnect();
+        unregisterReceiver(connectStateReceiver);
+        //优雅的关闭线程连接
+        if (mConnectThread != null) {
+            mConnectThread.cancelConnect();
+        }
         super.onDestroy();
     }
+
+    public final BroadcastReceiver connectStateReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+            switch (action) {
+                case BluetoothDevice.ACTION_ACL_CONNECTED:
+                    System.out.println("ACTION_ACL_CONNECTED");
+                    break;
+                case BluetoothDevice.ACTION_ACL_DISCONNECTED:
+                    System.out.println("ACTION_ACL_DISCONNECTED");
+                    fragment_data_handler.obtainMessage(CONNECT_DIS).sendToTarget();
+                    break;
+                case BluetoothDevice.ACTION_ACL_DISCONNECT_REQUESTED:
+                    System.out.println("ACTION_ACL_DISCONNECT_REQUESTED");
+                    break;
+                default:
+                    break;
+
+            }
+        }
+    };
 }

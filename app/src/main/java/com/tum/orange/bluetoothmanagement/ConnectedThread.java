@@ -57,6 +57,7 @@ public class ConnectedThread extends Thread {
 
             try {
                 n_bytes = mInputStream.read(buffer);
+                System.out.println("readbyte:" + n_bytes);
                 if (n_bytes >= 1) {
                     recieveMessage = new String(buffer, 0, n_bytes);
                     //System.out.println("recieveMessage from TargetDevice:" + recieveMessage);
@@ -64,6 +65,12 @@ public class ConnectedThread extends Thread {
                 }
             } catch (IOException e) {
                 e.printStackTrace();
+                System.out.println("接收数据异常...");
+                try {
+                    mOutputStream.close();
+                } catch (IOException e1) {
+                    e1.printStackTrace();
+                }
             }
         }
     }

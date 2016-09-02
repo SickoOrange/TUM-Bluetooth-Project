@@ -5,14 +5,46 @@
     <item
         android:id="@+id/action_device"
         android:title="Device"
-        app:showAsAction="always" />
+        app:showAsAction="always"
+        />
 
     <!-- Settings, should always be in the overflow -->
     <item
-        android:id="@+id/overflow_settings"
-        android:title="overflow_menu"
-        app:showAsAction="never"
-        />
+        android:id="@+id/Start"
+        android:icon="@drawable/start"
+        android:title="Start"
+        app:showAsAction="collapseActionView" />
+    <item
+        android:id="@+id/Pause"
+        android:icon="@drawable/pause"
+        android:title="Pause"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/Reset"
+        android:icon="@drawable/reset"
+        android:title="Reset"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/Lower_Sens"
+        android:icon="@drawable/minus"
+        android:title="Lower_Sens"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/Higher_Sens"
+        android:icon="@drawable/plus"
+        android:title="Higher_Sens"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/Save_Msmt"
+        android:icon="@drawable/save"
+        android:title="Save_Msmt"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/Clear"
+        android:icon="@drawable/broom"
+        android:title="Clear"
+        app:showAsAction="never" />
 
 
 </menu>

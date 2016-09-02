@@ -44,6 +44,7 @@ public class LoadingActivity extends AppCompatActivity {
         adapter = BluetoothAdapter.getDefaultAdapter();
         if (adapter == null) {
             Toast.makeText(this, "this Device dont support Bluetooth!", Toast.LENGTH_LONG).show();
+            startActivity(new Intent(LoadingActivity.this, MainActivity.class));
         } else {
             if (!adapter.isEnabled()) {
 

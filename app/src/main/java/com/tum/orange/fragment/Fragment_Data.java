@@ -28,6 +28,7 @@ import com.tum.orange.tum_lmt.R;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.text.DecimalFormat;
 
 /**
  * Fragment Data
@@ -41,6 +42,11 @@ public class Fragment_Data extends Fragment {
     private LineChart mChart;
     private Button btn;
     private BluetoothDevice device;
+    private float yMaxValue;
+    private float yMinValue;
+    private int xCount;
+    private float Mean;
+    private String Mean_String;
     /**
      * 定义一个handler对象 用于与activity进行交互 此时
      * activity拿到handler的对象 可以发送消息给fragment_data
@@ -80,12 +86,20 @@ public class Fragment_Data extends Fragment {
         }
     };
     private MainActivity mActivity;
+    private TextView minValue;
+    private TextView meanValue;
+    private TextView maxValue;
+    private TextView numberValue;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         if (mViewContent == null) {
             mViewContent = inflater.inflate(R.layout.fragment_data, null);
+            minValue = (TextView) mViewContent.findViewById(R.id.minValue);
+            meanValue = (TextView) mViewContent.findViewById(R.id.meanValue);
+            maxValue = (TextView) mViewContent.findViewById(R.id.maxValue);
+            numberValue = (TextView) mViewContent.findViewById(R.id.numberValue);
             mChart = (LineChart) mViewContent.findViewById(R.id.mChart);
             // btn = (Button) mViewContent.findViewById(R.id.add);
             mChart.setDescription("Delay");
@@ -250,6 +264,17 @@ public class Fragment_Data extends Fragment {
 
         // mChart.moveViewTo(data.getXValCount()-7, 55f,
         // AxisDependency.LEFT);
+        yMaxValue = data.getYMax();
+        yMinValue = data.getYMin();
+        xCount = data.getXValCount();
+        Mean = (yMaxValue + yMinValue) / xCount;
+        DecimalFormat df = new DecimalFormat(".00");
+        Mean_String = df.format(Mean);
+        maxValue.setText(Float.toString(yMaxValue) + "ms");
+        minValue.setText(Float.toString(yMinValue) + "ms");
+        meanValue.setText(Mean_String + "ms");
+        numberValue.setText(""+xCount);
+
     }
 
     // 初始化数据集，添加一条统计折线，可以简单的理解是初始化y坐标轴线上点的表征

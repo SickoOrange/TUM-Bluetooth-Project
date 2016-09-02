@@ -15,6 +15,7 @@ import android.support.v4.app.FragmentTabHost;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -25,6 +26,8 @@ import com.tum.orange.bluetoothmanagement.ConnectThread;
 import com.tum.orange.bluetoothmanagement.ConnectedThread;
 import com.tum.orange.fragment.Fragment_Data;
 import com.tum.orange.fragment.Fragment_Setting;
+
+import java.lang.reflect.Method;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -79,6 +82,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void init_view() {
         my_toolbar = (Toolbar) findViewById(R.id.my_toolbar);
+        my_toolbar.setOverflowIcon(getResources().getDrawable(R.drawable.menu_overflow));
         setSupportActionBar(my_toolbar);
         actionBar = getSupportActionBar();
         actionBar.setTitle("No Connection");
@@ -133,6 +137,22 @@ public class MainActivity extends AppCompatActivity {
                 // Invoke the superclass to handle it.
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        if (menu != null) {
+            if (menu.getClass().getSimpleName().equals("MenuBuilder")) {
+                try {
+                    Method m = menu.getClass().getDeclaredMethod(
+                            "setOptionalIconsVisible", Boolean.TYPE);
+                    m.setAccessible(true);
+                    m.invoke(menu, true);
+                } catch (Exception e) {
+                    Log.e(getClass().getSimpleName(), "onMenuOpened...unable to set icons for overflow menu", e);
+                }
+            }
+        }
+        return super.onPrepareOptionsMenu(menu);
     }
 
 
@@ -215,4 +235,6 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     };
+
+
 }

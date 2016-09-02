@@ -51,6 +51,7 @@
                 android:text="Min" />
 
             <TextView
+                android:id="@+id/minValue"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -70,6 +71,7 @@
                 android:text="Mean" />
 
             <TextView
+                android:id="@+id/meanValue"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -89,6 +91,7 @@
                 android:text="Max" />
 
             <TextView
+                android:id="@+id/maxValue"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -127,6 +130,7 @@
                 android:text="Msmt" />
 
             <TextView
+                android:id="@+id/numberValue"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"

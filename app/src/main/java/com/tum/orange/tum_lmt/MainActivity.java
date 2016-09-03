@@ -25,7 +25,7 @@ import android.widget.TabHost;
 import com.tum.orange.bluetoothmanagement.ConnectThread;
 import com.tum.orange.bluetoothmanagement.ConnectedThread;
 import com.tum.orange.fragment.Fragment_Data;
-import com.tum.orange.fragment.Fragment_Setting;
+import com.tum.orange.fragment.MyPreferenceFragment;
 
 import java.lang.reflect.Method;
 
@@ -45,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
             R.drawable.tab_center,
             R.drawable.tab_counter,
     };
-    private Class[] aClass = {Fragment_Data.class, Fragment_Setting.class};
+    private Class[] aClass = {Fragment_Data.class, MyPreferenceFragment.class};
 
     // Fragment Tag
     private String mFragmentTags[] = {
@@ -235,6 +235,5 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     };
-
 
 }

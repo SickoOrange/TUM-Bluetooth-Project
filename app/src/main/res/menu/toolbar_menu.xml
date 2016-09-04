@@ -10,38 +10,38 @@
 
     <!-- Settings, should always be in the overflow -->
     <item
-        android:id="@+id/Start"
+        android:id="@+id/start"
         android:icon="@drawable/start"
         android:title="Start"
         app:showAsAction="collapseActionView" />
     <item
-        android:id="@+id/Pause"
+        android:id="@+id/stop"
         android:icon="@drawable/pause"
-        android:title="Pause"
+        android:title="Stop"
         app:showAsAction="never" />
     <item
-        android:id="@+id/Reset"
+        android:id="@+id/reset"
         android:icon="@drawable/reset"
         android:title="Reset"
         app:showAsAction="never" />
     <item
-        android:id="@+id/Lower_Sens"
+        android:id="@+id/lower_Sens"
         android:icon="@drawable/minus"
         android:title="Lower_Sens"
         app:showAsAction="never" />
     <item
-        android:id="@+id/Higher_Sens"
+        android:id="@+id/higher_Sens"
         android:icon="@drawable/plus"
         android:title="Higher_Sens"
         app:showAsAction="never" />
     <item
-        android:id="@+id/Save_Msmt"
+        android:id="@+id/save_Msmt"
         android:icon="@drawable/save"
         android:title="Save_Msmt"
         app:showAsAction="never" />
 
     <item
-        android:id="@+id/Clear"
+        android:id="@+id/clear"
         android:icon="@drawable/broom"
         android:title="Clear"
         app:showAsAction="never" />

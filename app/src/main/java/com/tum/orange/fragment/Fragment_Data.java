@@ -23,6 +23,7 @@ import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.utils.ColorTemplate;
+import com.tum.orange.constants.ConstansForBluetoothService;
 import com.tum.orange.tum_lmt.MainActivity;
 import com.tum.orange.tum_lmt.R;
 
@@ -54,37 +55,138 @@ public class Fragment_Data extends Fragment {
     public Handler fragment_data_handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
-            if (msg.what == 1) {
-                System.out.println("得到消息");
-            } else if (msg.what == 2) {
-                System.out.println("得到消息+22");
-                if (mOutputStream != null) {
-                    try {
-                        mOutputStream.write("hello world".getBytes());
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-            } else if (msg.what == 10) {
-                msgfromThread = (String) msg.obj;
-                System.out.println("recieveMessage from Thread:" + msgfromThread);
-                //tv_data.setText("recieveMessage from Thread:" + msgfromThread);
-                float f = Float.parseFloat(msgfromThread);
-                addEntry(f);
+            /**
+             *
+             if (msg.what == 1) {
+             System.out.println("得到消息");
+             } else if (msg.what == 2) {
+             System.out.println("得到消息+22");
+             if (mOutputStream != null) {
+             try {
+             mOutputStream.write("hello world".getBytes());
+             } catch (IOException e) {
+             e.printStackTrace();
+             }
+             }
+             } else if (msg.what == 10) {
+             msgfromThread = (String) msg.obj;
+             System.out.println("recieveMessage from Thread:" + msgfromThread);
+             //tv_data.setText("recieveMessage from Thread:" + msgfromThread);
+             float f = Float.parseFloat(msgfromThread);
+             addEntry(f);
 
-            } else if (msg.what == 11) {
-                mOutputStream = (OutputStream) msg.obj;
-                System.out.println("从线程中拿到了一个Outputstream:" + mOutputStream.hashCode());
-            } else if (msg.what == 1005) {
-                device = (BluetoothDevice) msg.obj;
-                mActivity.getSupportActionBar().setTitle("Connected to " + device.getName());
-            } else if (msg.what == 1006 || msg.what == 1007) {
-                mActivity.getSupportActionBar().setTitle("Disconnect");
-            } else if (msg.what == 1008) {
-                mActivity.getSupportActionBar().setTitle("connecting...");
+             } else if (msg.what == 11) {
+             mOutputStream = (OutputStream) msg.obj;
+             System.out.println("从线程中拿到了一个Outputstream:" + mOutputStream.hashCode());
+             } else if (msg.what == 1005) {
+             device = (BluetoothDevice) msg.obj;
+             mActivity.getSupportActionBar().setTitle("Connected to " + device.getName());
+             } else if (msg.what == 1006 || msg.what == 1007) {
+             mActivity.getSupportActionBar().setTitle("Disconnect");
+             } else if (msg.what == 1008) {
+             mActivity.getSupportActionBar().setTitle("connecting...");
+             }
+             */
+
+            switch (msg.what) {
+                case 1:
+                    System.out.println("得到消息");
+                    break;
+                case 2:
+                    System.out.println("得到消息+22");
+                    if (mOutputStream != null) {
+                        try {
+                            mOutputStream.write("hello world".getBytes());
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    break;
+                case 10:
+                    msgfromThread = (String) msg.obj;
+                    System.out.println("recieveMessage from Thread:" + msgfromThread);
+                    //tv_data.setText("recieveMessage from Thread:" + msgfromThread);
+                    float f = Float.parseFloat(msgfromThread);
+                    addEntry(f);
+                    break;
+                case 11:
+                    mOutputStream = (OutputStream) msg.obj;
+                    System.out.println("从线程中拿到了一个Outputstream:" + mOutputStream.hashCode());
+                    break;
+                case 1005:
+                    device = (BluetoothDevice) msg.obj;
+                    mActivity.getSupportActionBar().setTitle("Connected to " + device.getName());
+                    break;
+                case 1006:
+                    mActivity.getSupportActionBar().setTitle("Disconnect");
+                    break;
+                case 1007:
+                    mActivity.getSupportActionBar().setTitle("Disconnect");
+                    break;
+                case 1008:
+                    mActivity.getSupportActionBar().setTitle("connecting...");
+                    break;
+                case ConstansForBluetoothService.BUTTON_START:
+                    if (mOutputStream == null) {
+                        return;
+                    }
+                    writeMessage(ConstansForBluetoothService.START);
+                    break;
+                case ConstansForBluetoothService.BUTTON_STOP:
+                    if (mOutputStream == null) {
+                        return;
+                    }
+                    writeMessage(ConstansForBluetoothService.STOP);
+                    break;
+                case ConstansForBluetoothService.BUTTON_RESET:
+                    if (mOutputStream == null) {
+                        return;
+                    }
+                    writeMessage(ConstansForBluetoothService.RESET);
+                    break;
+                case ConstansForBluetoothService.BUTTON_LOWER_SENS:
+                    if (mOutputStream == null) {
+                        return;
+                    }
+                    writeMessage(ConstansForBluetoothService.LOWER_SENS);
+                    break;
+                case ConstansForBluetoothService.BUTTON_HIGHER_SENS:
+                    if (mOutputStream == null) {
+                        return;
+                    }
+                    writeMessage(ConstansForBluetoothService.HIGHER_SENS);
+                    break;
+                case ConstansForBluetoothService.BUTTON_SAVE_MSMT:
+                    break;
+                case ConstansForBluetoothService.BUTTON_CLEAR:
+                    break;
+                default:
+                    break;
             }
         }
     };
+
+    /**
+     * send a Message
+     *
+     * @param msg Message content
+     */
+    private void writeMessage(String msg) {
+        if (msg != null && (msg.length() > 0)) {
+            try {
+                mOutputStream.write(msg.getBytes());
+            } catch (IOException e) {
+                e.printStackTrace();
+                try {
+                    mOutputStream.close();
+                } catch (IOException e1) {
+                    e1.printStackTrace();
+                }
+            }
+            System.out.println("发送成功");
+        }
+    }
+
     private MainActivity mActivity;
     private TextView minValue;
     private TextView meanValue;
@@ -273,7 +375,7 @@ public class Fragment_Data extends Fragment {
         maxValue.setText(Float.toString(yMaxValue) + "ms");
         minValue.setText(Float.toString(yMinValue) + "ms");
         meanValue.setText(Mean_String + "ms");
-        numberValue.setText(""+xCount);
+        numberValue.setText("" + xCount);
 
     }
 

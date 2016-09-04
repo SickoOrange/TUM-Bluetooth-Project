@@ -76,25 +76,7 @@ public class ConnectedThread extends Thread {
     }
 
 
-    /**
-     * send a Message
-     *
-     * @param msg Message content
-     */
-    public void writeMessage(String msg) {
-        if (msg != null && (msg.length() > 0)) {
-            try {
-                mOutputStream.write(msg.getBytes());
-            } catch (IOException e) {
-                e.printStackTrace();
-                try {
-                    mOutputStream.close();
-                } catch (IOException e1) {
-                    e1.printStackTrace();
-                }
-            }
-        }
-    }
+
 
     public void cancel() {
         try {

@@ -24,6 +24,7 @@ import android.widget.TabHost;
 
 import com.tum.orange.bluetoothmanagement.ConnectThread;
 import com.tum.orange.bluetoothmanagement.ConnectedThread;
+import com.tum.orange.constants.ConstansForBluetoothService;
 import com.tum.orange.fragment.Fragment_Data;
 import com.tum.orange.fragment.MyPreferenceFragment;
 
@@ -33,6 +34,7 @@ import java.lang.reflect.Method;
 public class MainActivity extends AppCompatActivity {
     public static final int REQUEST_DEVICE_INFO = 1001;
     private static final int CONNECT_DIS = 1007;
+
     String app_UUID = "00001101-0000-1000-8000-00805F9B34FB";
     private FragmentTabHost mTabHost;
     private Toolbar my_toolbar;
@@ -55,6 +57,7 @@ public class MainActivity extends AppCompatActivity {
     private BluetoothDevice resultDevice;
     private BluetoothAdapter adapter;
     private BluetoothSocket btSocket;
+    private Boolean isStarted = false;
 
     public void setHandler(Handler handler) {
         fragment_data_handler = handler;
@@ -126,11 +129,43 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
+
+    /**
+     * This hook is called whenever an item in your options menu is selected.
+     *
+     * @param item
+     * @return
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_device:
                 startActivityForResult(new Intent(getApplicationContext(), DeviceListActivity.class), REQUEST_DEVICE_INFO);
+                return true;
+            case R.id.start:
+                fragment_data_handler.obtainMessage(ConstansForBluetoothService.BUTTON_START).sendToTarget();
+                return true;
+            case R.id.stop:
+
+                fragment_data_handler.obtainMessage(ConstansForBluetoothService.BUTTON_STOP).sendToTarget();
+                isStarted = false;
+                return true;
+            case R.id.reset:
+                fragment_data_handler.obtainMessage(ConstansForBluetoothService.BUTTON_RESET).sendToTarget();
+                isStarted = false;
+                return true;
+            case R.id.lower_Sens:
+                fragment_data_handler.obtainMessage(ConstansForBluetoothService.BUTTON_LOWER_SENS).sendToTarget();
+                return true;
+            case R.id.higher_Sens:
+                fragment_data_handler.obtainMessage(ConstansForBluetoothService.BUTTON_HIGHER_SENS).sendToTarget();
+                return true;
+            case R.id.save_Msmt:
+                fragment_data_handler.obtainMessage(ConstansForBluetoothService.BUTTON_SAVE_MSMT).sendToTarget();
+                return true;
+            case R.id.clear:
+                //clear the chart
+                fragment_data_handler.obtainMessage(ConstansForBluetoothService.BUTTON_CLEAR).sendToTarget();
                 return true;
             default:
                 // If we got here, the user's action was not recognized.
@@ -139,6 +174,12 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * set the icon in the overfloe
+     *
+     * @param menu
+     * @return
+     */
     public boolean onPrepareOptionsMenu(Menu menu) {
         if (menu != null) {
             if (menu.getClass().getSimpleName().equals("MenuBuilder")) {

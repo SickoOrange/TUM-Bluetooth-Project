@@ -15,7 +15,6 @@ public class MyPreferenceFragment extends PreferenceFragmentCompat {
         setPreferencesFromResource(R.xml.pref, s);
         ListPreference downloadType = (ListPreference) findPreference("downloadType");
 
-
     }
 
 }

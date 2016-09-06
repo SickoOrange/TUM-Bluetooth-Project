@@ -1,33 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <PreferenceCategory android:title="In-line preferences">
-        <CheckBoxPreference
-            android:key="checkbox_preference"
-            android:summary="这是一个复选框这是一个复选框这是一个复选框这是一个复选框这是一个复选框这是一个复选框这是一个复选框这是一个复选框这是一个复选框" />
+    <PreferenceCategory android:title="Bluetooth Auto Connect">
+        <SwitchPreference
+            android:key="switch_preference"
+            android:summary="It automatically tries to connect to your Bluetooth devices when Bluetooth has been turned on or when your device screen goes on" />
     </PreferenceCategory>
-    <PreferenceCategory android:title="Dialog-based preferences">
-        <EditTextPreference
-            android:dialogTitle="请输入你最喜欢的种族"
-            android:key="edittext_preference"
-            android:summary="一个使用了编辑文本对话框的例子" />
+
+
+    <PreferenceCategory android:title="File Explorer">
         <ListPreference
-            android:defaultValue="3"
-            android:dependency="checkbox_preference"
+            android:defaultValue="0"
+            android:dialogTitle="Android Development "
             android:entries="@array/listArray"
             android:entryValues="@array/listValues"
             android:key="downloadType"
-            android:dialogTitle="hello "
-            android:summary="Select the kind of data that you would like to download" />
+            android:summary="Select the kind of data file that you would like to explore" />
+        <ListPreference
+            android:defaultValue="0"
+            android:dialogTitle="Android Development "
+            android:entries="@array/listArray"
+            android:entryValues="@array/listValues"
+            android:key="downloadType1"
+            android:summary="Delete data file that you would like to delete" />
         <SwitchPreference
             android:key="switch"
             android:summary="this is a switchpreferene" />
-        <MultiSelectListPreference
-            android:summary="multiselectlistprederence"
-            android:key="multi"
-            android:entries="@array/listArray"
-            android:entryValues="@array/listValues"/>
-
     </PreferenceCategory>
 
 

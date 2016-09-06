@@ -3,6 +3,8 @@ package com.tum.orange.bluetoothmanagement;
 import android.bluetooth.BluetoothSocket;
 import android.os.Handler;
 
+import com.tum.orange.constants.ConstansForBluetoothService;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -17,8 +19,7 @@ public class ConnectedThread extends Thread {
     private InputStream mInputStream;
     private OutputStream mOutputStream;
     private Handler fragment_data_handler;
-    private static final int MESSAGE_READ = 10;
-    private static final int MESSAGE_WRITE_STREAM = 11;
+
 
     public ConnectedThread(BluetoothSocket mSocket, Handler fragment_data_handler) {
         this.mSocket = mSocket;
@@ -37,7 +38,7 @@ public class ConnectedThread extends Thread {
         mInputStream = tmpin;
         mOutputStream = tmpout;
         System.out.println("开启监听线程...");
-        fragment_data_handler.obtainMessage(MESSAGE_WRITE_STREAM, mOutputStream).sendToTarget();
+        fragment_data_handler.obtainMessage(ConstansForBluetoothService.MESSAGE_WRITE_STREAM, mOutputStream).sendToTarget();
     }
 
 
@@ -56,12 +57,13 @@ public class ConnectedThread extends Thread {
             }
 
             try {
+
                 n_bytes = mInputStream.read(buffer);
                 System.out.println("readbyte:" + n_bytes);
-                if (n_bytes >= 1) {
+                if (n_bytes >= 1 && n_bytes <= 10) {
                     recieveMessage = new String(buffer, 0, n_bytes);
-                    //System.out.println("recieveMessage from TargetDevice:" + recieveMessage);
-                    fragment_data_handler.obtainMessage(MESSAGE_READ, recieveMessage).sendToTarget();
+                    System.out.println("recieveMessage from TargetDevice:" + recieveMessage);
+                    fragment_data_handler.obtainMessage(ConstansForBluetoothService.MESSAGE_READ, recieveMessage).sendToTarget();
                 }
             } catch (IOException e) {
                 e.printStackTrace();
@@ -74,8 +76,6 @@ public class ConnectedThread extends Thread {
             }
         }
     }
-
-
 
 
     public void cancel() {

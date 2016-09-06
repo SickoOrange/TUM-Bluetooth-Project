@@ -5,6 +5,8 @@ package com.tum.orange.constants;
  */
 public class ConstansForBluetoothService {
 
+    public static final int MESSAGE_READ = 10;
+    public static final int MESSAGE_WRITE_STREAM = 11;
 
     public static final String START = "1";
     public static final String STOP = "0";
@@ -22,4 +24,8 @@ public class ConstansForBluetoothService {
     public static final int BUTTON_HIGHER_SENS = 24;
     public static final int BUTTON_CLEAR = 25;
     public static final int BUTTON_SAVE_MSMT = 26;
+
+    public static final String CLEAR_TEXT = "0.00ms";
+
+    public static final String FileDirector = "TUM_Measure";
 }

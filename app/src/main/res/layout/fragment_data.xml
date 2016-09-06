@@ -111,6 +111,7 @@
                 android:text="Std Dev" />
 
             <TextView
+                android:id="@+id/Std_Dev"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"

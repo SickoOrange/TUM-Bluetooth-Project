@@ -2,61 +2,52 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
+
+    <PreferenceCategory android:title="Bluetooth Device Management">
+        <Preference
+            android:key="device_management_preference"
+            android:summary="Manage your Bluetooth device or connect a new Bluetooth device" />
+    </PreferenceCategory>
+
     <PreferenceCategory android:title="Bluetooth Auto Connect">
         <SwitchPreference
-            android:key="switch_preference"
+            android:key="auto_connect_preference"
             android:summary="It automatically tries to connect to your Bluetooth devices when Bluetooth has been turned on or when your device screen goes on" />
     </PreferenceCategory>
 
 
     <PreferenceCategory android:title="File Explorer">
+        <SwitchPreference
+            android:key="switch_list_preference"
+            android:summary="Enable File Explorer" />
         <ListPreference
             android:defaultValue="0"
-            android:dialogTitle="Android Development "
-            android:entries="@array/listArray"
-            android:entryValues="@array/listValues"
-            android:key="downloadType"
+            android:dependency="switch_list_preference"
+            android:dialogTitle="Measure Data List "
+            android:key="filelist_preference"
             android:summary="Select the kind of data file that you would like to explore" />
         <ListPreference
             android:defaultValue="0"
+            android:dependency="switch_list_preference"
             android:dialogTitle="Android Development "
             android:entries="@array/listArray"
             android:entryValues="@array/listValues"
             android:key="downloadType1"
             android:summary="Delete data file that you would like to delete" />
-        <SwitchPreference
-            android:key="switch"
-            android:summary="this is a switchpreferene" />
     </PreferenceCategory>
 
 
     <PreferenceCategory android:title="Launch preferences">
-        <!-- This PreferenceScreen tag serves as a screen break (similar to page break in word processing). Like for other preference types, we assign a key here so it is able to save and restore its instance state. -->
-        <PreferenceScreen
-            android:key="screen_preference"
-            android:summary="展示另一个首选项配置页面">
-            <!-- 你可以在这里放置更多的首选项内容，将被在下一个页面呈现出来 -->
-            <CheckBoxPreference
-                android:key="next_screen_checkbox_preference"
-                android:summary="在另一个页面展示但出于同一个层级的首选项配置" />
-
-        </PreferenceScreen>
-        <PreferenceScreen android:summary="从一个意图中启动一个activity">
-            <intent
-                android:action="android.intent.action.VIEW"
-                android:data="http://www.baidu.com" />
-        </PreferenceScreen>
+        <SwitchPreference
+            android:key="launch_mode_preference"
+            android:summary="Show the user Guide every time when your device screen goes on" />
     </PreferenceCategory>
-    <PreferenceCategory android:title="Preference attributes">
-        <CheckBoxPreference
-            android:key="parent_checkbox_preference"
-            android:summary="这是一个可见的父类" />
-        <!-- 子类的可见类型是由样式属性定义的 -->
-        <CheckBoxPreference
-            android:dependency="parent_checkbox_preference"
-            android:key="child_checkbox_preference"
-            android:layout="?android:attr/preferenceLayoutChild"
-            android:summary="这是一个可见的子类" />
+
+
+    <PreferenceCategory android:title="Help">
+        <Preference
+            android:key="about_preference"
+            android:summary="About the APP" />
     </PreferenceCategory>
 
 </PreferenceScreen>

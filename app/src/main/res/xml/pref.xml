@@ -1,8 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
-
-
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
     <PreferenceCategory android:title="Bluetooth Device Management">
         <Preference
             android:key="device_management_preference"
@@ -41,6 +38,18 @@
         <SwitchPreference
             android:key="launch_mode_preference"
             android:summary="Show the user Guide every time when your device screen goes on" />
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="Emulator Mode">
+        <SwitchPreference
+            android:checked="false"
+            android:key="emulator_mode_preference"
+            android:summary="This mode will automatic imitate Bluetooth devices and send data to the APP" />
+        <CheckBoxPreference
+            android:checked="false"
+            android:dependency="emulator_mode_preference"
+            android:key="send_data_preference"
+            android:summary="Send data to APP" />
     </PreferenceCategory>
 
 

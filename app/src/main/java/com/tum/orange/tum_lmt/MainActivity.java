@@ -36,7 +36,7 @@ import java.lang.reflect.Method;
 
 
 public class MainActivity extends AppCompatActivity {
-    public static final int REQUEST_DEVICE_INFO = 1001;
+
     private static final int CONNECT_DIS = 1007;
 
     String app_UUID = "00001101-0000-1000-8000-00805F9B34FB";
@@ -155,7 +155,7 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_device:
-                startActivityForResult(new Intent(getApplicationContext(), DeviceListActivity.class), REQUEST_DEVICE_INFO);
+                startActivityForResult(new Intent(getApplicationContext(), DeviceListActivity.class), ConstansForBluetoothService.REQUEST_DEVICE_INFO);
                 return true;
             case R.id.start:
                 fragment_data_handler.obtainMessage(ConstansForBluetoothService.BUTTON_START).sendToTarget();

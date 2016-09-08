@@ -28,4 +28,6 @@ public class ConstansForBluetoothService {
     public static final String CLEAR_TEXT = "0.00ms";
 
     public static final String FileDirector = "TUM_Measure";
+
+    public static final int REQUEST_DEVICE_INFO = 1001;
 }

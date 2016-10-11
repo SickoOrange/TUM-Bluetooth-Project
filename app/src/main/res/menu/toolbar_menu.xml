@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+      xmlns:app="http://schemas.android.com/apk/res-auto">
     <!-- "Mark Favorite", should appear as action button if possible -->
     <item
         android:id="@+id/action_device"
         android:title="Device"
-        app:showAsAction="always"
+        app:showAsAction="never"
         />
 
     <!-- Settings, should always be in the overflow -->
@@ -13,38 +13,38 @@
         android:id="@+id/start"
         android:icon="@drawable/start"
         android:title="Start"
-        app:showAsAction="collapseActionView" />
+        app:showAsAction="collapseActionView"/>
     <item
         android:id="@+id/stop"
         android:icon="@drawable/pause"
         android:title="Stop"
-        app:showAsAction="never" />
+        app:showAsAction="never"/>
     <item
         android:id="@+id/reset"
         android:icon="@drawable/reset"
         android:title="Reset"
-        app:showAsAction="never" />
+        app:showAsAction="never"/>
     <item
         android:id="@+id/lower_Sens"
         android:icon="@drawable/minus"
         android:title="Lower_Sens"
-        app:showAsAction="never" />
+        app:showAsAction="never"/>
     <item
         android:id="@+id/higher_Sens"
         android:icon="@drawable/plus"
         android:title="Higher_Sens"
-        app:showAsAction="never" />
+        app:showAsAction="never"/>
     <item
         android:id="@+id/save_Msmt"
         android:icon="@drawable/save"
         android:title="Save_Msmt"
-        app:showAsAction="never" />
+        app:showAsAction="never"/>
 
     <item
         android:id="@+id/clear"
         android:icon="@drawable/broom"
         android:title="Clear"
-        app:showAsAction="never" />
+        app:showAsAction="never"/>
 
 
 </menu>

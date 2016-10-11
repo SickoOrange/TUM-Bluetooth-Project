@@ -24,4 +24,5 @@
         android:layout_below="@+id/my_toolbar_in_devicelist">
 
     </ExpandableListView>
+
 </RelativeLayout>

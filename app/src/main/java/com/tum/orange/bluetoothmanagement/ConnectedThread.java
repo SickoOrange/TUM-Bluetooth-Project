@@ -3,7 +3,7 @@ package com.tum.orange.bluetoothmanagement;
 import android.bluetooth.BluetoothSocket;
 import android.os.Handler;
 
-import com.tum.orange.constants.ConstansForBluetoothService;
+import com.tum.orange.constants.Constant;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -38,7 +38,7 @@ public class ConnectedThread extends Thread {
         mInputStream = tmpin;
         mOutputStream = tmpout;
         System.out.println("开启监听线程...");
-        fragment_data_handler.obtainMessage(ConstansForBluetoothService.MESSAGE_WRITE_STREAM, mOutputStream).sendToTarget();
+        fragment_data_handler.obtainMessage(Constant.MESSAGE_WRITE_STREAM, mOutputStream).sendToTarget();
     }
 
 
@@ -63,7 +63,7 @@ public class ConnectedThread extends Thread {
                 if (n_bytes >= 1 && n_bytes <= 10) {
                     recieveMessage = new String(buffer, 0, n_bytes);
                     System.out.println("recieveMessage from TargetDevice:" + recieveMessage);
-                    fragment_data_handler.obtainMessage(ConstansForBluetoothService.MESSAGE_READ, recieveMessage).sendToTarget();
+                    fragment_data_handler.obtainMessage(Constant.MESSAGE_READ, recieveMessage).sendToTarget();
                 }
             } catch (IOException e) {
                 e.printStackTrace();

@@ -11,11 +11,6 @@
         <item name="preferenceTheme">@style/PreferenceThemeOverlay.v14.Material</item>
     </style>
 
-
-
-
-
-
     <style name="ToolbarTheme" parent="ThemeOverlay.AppCompat.ActionBar">
 
         <item name="actionMenuTextColor">@android:color/white</item>
@@ -47,4 +42,8 @@
         <item name="android:dropDownHorizontalOffset">0dp</item>
 
     </style>
+
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 </resources>

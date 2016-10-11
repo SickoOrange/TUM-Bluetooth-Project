@@ -8,10 +8,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
+import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -55,9 +55,22 @@ public class DeviceListActivity extends AppCompatActivity implements ExpandableL
 
         my_toolbar_in_devicelist = (Toolbar) findViewById(R.id.my_toolbar_in_devicelist);
         setSupportActionBar(my_toolbar_in_devicelist);
+
+        /**
+         * 重写Toolbar的NavigationButton的监听事件，覆盖默认实现，避免MainActivity重复创建
+         * 重写后 按钮点击行为跟Back键行为一致
+         */
+        my_toolbar_in_devicelist.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
         actionBar = getSupportActionBar();
-        actionBar.setDisplayHomeAsUpEnabled(true);
-        actionBar.setTitle("Select a device to connect");
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setTitle("Select a device to connect");
+        }
 
         /**
          * MVC Module to design the expandable device ListView
@@ -129,7 +142,8 @@ public class DeviceListActivity extends AppCompatActivity implements ExpandableL
         //in order to support API 23 Android 6.0; We must do this
         ActivityCompat.requestPermissions(DeviceListActivity.this,
                 new String[]{
-                        android.Manifest.permission.ACCESS_COARSE_LOCATION}, REQUEST_COARSE_LOCATION_PERMISSIONS);
+                        android.Manifest.permission.ACCESS_COARSE_LOCATION},
+                REQUEST_COARSE_LOCATION_PERMISSIONS);
 
     }
 

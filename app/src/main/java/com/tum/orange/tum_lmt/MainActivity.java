@@ -8,6 +8,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Handler;
@@ -25,10 +26,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TabHost;
+import android.widget.Toast;
 
 import com.tum.orange.bluetoothmanagement.ConnectThread;
 import com.tum.orange.bluetoothmanagement.ConnectedThread;
-import com.tum.orange.constants.ConstansForBluetoothService;
+import com.tum.orange.constants.Constant;
 import com.tum.orange.fragment.Fragment_Data;
 import com.tum.orange.fragment.MyPreferenceFragment;
 
@@ -42,7 +44,6 @@ public class MainActivity extends AppCompatActivity {
     String app_UUID = "00001101-0000-1000-8000-00805F9B34FB";
     private FragmentTabHost mTabHost;
     private Toolbar my_toolbar;
-    private ActionBar actionBar;
     private Snackbar snackbar;
     public Handler fragment_data_handler;
     private ConnectThread mConnectThread;
@@ -62,9 +63,31 @@ public class MainActivity extends AppCompatActivity {
     private BluetoothAdapter adapter;
     private BluetoothSocket btSocket;
     private Boolean isStarted = false;
+    private SharedPreferences auto_connect_sharedPreference;
 
     public void setHandler(Handler handler) {
         fragment_data_handler = handler;
+        getSharedPreferences("com.tum.orange.tum_lmt_preferences", MODE_PRIVATE).edit()
+                .putBoolean("emulator_mode_preference", false).commit();
+        auto_connect_sharedPreference = getSharedPreferences("com.tum.orange" +
+                ".tum_lmt_preferences", MODE_PRIVATE);
+        boolean auto_connect_mode = auto_connect_sharedPreference.getBoolean
+                ("auto_connect_preference", false);
+        String lastDeviceMAC = auto_connect_sharedPreference.getString("last_connect_device", null);
+        System.out.println("com.tum.orange.tum_lmt_preferences:" + auto_connect_mode);
+        if (auto_connect_mode) {
+            if (lastDeviceMAC != null) {
+                Toast.makeText(this, "the APP is auto connecting the bluetooth device now!",
+                        Toast.LENGTH_SHORT).show();
+                autoConnect(lastDeviceMAC);
+            } else {
+                Toast.makeText(this, "don't find any device that before connect successfully",
+                        Toast.LENGTH_SHORT).show();
+            }
+
+        } else {
+            Toast.makeText(this, "Auto Connect Mode is disable!", Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override
@@ -89,12 +112,29 @@ public class MainActivity extends AppCompatActivity {
         if (ContextCompat.checkSelfPermission(getApplicationContext(),
                 android.Manifest.permission.READ_EXTERNAL_STORAGE)
                 != PackageManager.PERMISSION_GRANTED) {
-            if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.READ_EXTERNAL_STORAGE)) {
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission
+                    .READ_EXTERNAL_STORAGE)) {
             } else {
-                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission
+                        .READ_EXTERNAL_STORAGE}, 1);
             }
         }
 
+
+    }
+
+    /**
+     * auto connect the last bluetooth device
+     * if last bluetooth device connect successfully
+     */
+    private void autoConnect(String MAC) {
+        if (mConnectThread != null) {
+            mConnectThread.cancelConnect();
+            mConnectThread = null;
+        }
+        mConnectThread = new ConnectThread(MainActivity.this, MAC, null, app_UUID,
+                fragment_data_handler);
+        mConnectThread.start();
 
     }
 
@@ -102,16 +142,18 @@ public class MainActivity extends AppCompatActivity {
         my_toolbar = (Toolbar) findViewById(R.id.my_toolbar);
         my_toolbar.setOverflowIcon(getResources().getDrawable(R.drawable.menu_overflow));
         setSupportActionBar(my_toolbar);
-        actionBar = getSupportActionBar();
-        actionBar.setTitle("No Connection");
+        ActionBar actionBar = getSupportActionBar();
 
-
+        if (actionBar != null) {
+            actionBar.setTitle("No Connection");
+        }
         mTabHost = (FragmentTabHost) findViewById(android.R.id.tabhost);
         mTabHost.setup(this, getSupportFragmentManager(), R.id.tabcontent);
         mTabHost.getTabWidget().setDividerDrawable(null); // 去掉分割线
         for (int i = 0; i < mImages.length; i++) {
             // Tab按钮添加文字和图片
-            TabHost.TabSpec tabSpec = mTabHost.newTabSpec(mFragmentTags[i]).setIndicator(getImageView(i));
+            TabHost.TabSpec tabSpec = mTabHost.newTabSpec(mFragmentTags[i]).setIndicator
+                    (getImageView(i));
             // 添加Fragment
             mTabHost.addTab(tabSpec, aClass[i], null);
             // 设置Tab按钮的背景
@@ -120,8 +162,9 @@ public class MainActivity extends AppCompatActivity {
         mTabHost.setOnTabChangedListener(new TabHost.OnTabChangeListener() {
             @Override
             public void onTabChanged(String tabId) {
+                System.out.println(tabId);
                 if (Integer.parseInt(tabId) == 1) {
-                    System.out.println("1被按下了");
+                    System.out.println("Tab Click"+mTabHost.getCurrentTabTag());
                     Message msg = new Message();
                     msg.what = 1;
                     fragment_data_handler.sendMessage(msg);
@@ -155,32 +198,33 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_device:
-                startActivityForResult(new Intent(getApplicationContext(), DeviceListActivity.class), ConstansForBluetoothService.REQUEST_DEVICE_INFO);
+                startActivityForResult(new Intent(getApplicationContext(), DeviceListActivity
+                        .class), Constant.REQUEST_DEVICE_INFO);
                 return true;
             case R.id.start:
-                fragment_data_handler.obtainMessage(ConstansForBluetoothService.BUTTON_START).sendToTarget();
+                fragment_data_handler.obtainMessage(Constant.BUTTON_START).sendToTarget();
                 return true;
             case R.id.stop:
 
-                fragment_data_handler.obtainMessage(ConstansForBluetoothService.BUTTON_STOP).sendToTarget();
+                fragment_data_handler.obtainMessage(Constant.BUTTON_STOP).sendToTarget();
                 isStarted = false;
                 return true;
             case R.id.reset:
-                fragment_data_handler.obtainMessage(ConstansForBluetoothService.BUTTON_RESET).sendToTarget();
+                fragment_data_handler.obtainMessage(Constant.BUTTON_RESET).sendToTarget();
                 isStarted = false;
                 return true;
             case R.id.lower_Sens:
-                fragment_data_handler.obtainMessage(ConstansForBluetoothService.BUTTON_LOWER_SENS).sendToTarget();
+                fragment_data_handler.obtainMessage(Constant.BUTTON_LOWER_SENS).sendToTarget();
                 return true;
             case R.id.higher_Sens:
-                fragment_data_handler.obtainMessage(ConstansForBluetoothService.BUTTON_HIGHER_SENS).sendToTarget();
+                fragment_data_handler.obtainMessage(Constant.BUTTON_HIGHER_SENS).sendToTarget();
                 return true;
             case R.id.save_Msmt:
-                fragment_data_handler.obtainMessage(ConstansForBluetoothService.BUTTON_SAVE_MSMT).sendToTarget();
+                fragment_data_handler.obtainMessage(Constant.BUTTON_SAVE_MSMT).sendToTarget();
                 return true;
             case R.id.clear:
                 //clear the chart
-                fragment_data_handler.obtainMessage(ConstansForBluetoothService.BUTTON_CLEAR).sendToTarget();
+                fragment_data_handler.obtainMessage(Constant.BUTTON_CLEAR).sendToTarget();
                 return true;
             default:
                 // If we got here, the user's action was not recognized.
@@ -190,7 +234,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /**
-     * set the icon in the overfloe
+     * set the icon in the overflow
      *
      * @param menu
      * @return
@@ -204,7 +248,8 @@ public class MainActivity extends AppCompatActivity {
                     m.setAccessible(true);
                     m.invoke(menu, true);
                 } catch (Exception e) {
-                    Log.e(getClass().getSimpleName(), "onMenuOpened...unable to set icons for overflow menu", e);
+                    Log.e(getClass().getSimpleName(), "onMenuOpened...unable to set icons for " +
+                            "overflow menu", e);
                 }
             }
         }
@@ -222,7 +267,8 @@ public class MainActivity extends AppCompatActivity {
             case RESULT_OK:
                 Bundle bundle = data.getExtras();
                 resultDevice = bundle.getParcelable("DEVICE_INFO");
-                System.out.println("main activity::" + resultDevice.getName() + ": " + resultDevice.getAddress());
+                System.out.println("main activity::" + resultDevice.getName() + ": " +
+                        resultDevice.getAddress());
                 connectToRemoteDevice(resultDevice);
                 break;
             default:
@@ -236,7 +282,8 @@ public class MainActivity extends AppCompatActivity {
             mConnectThread.cancelConnect();
             mConnectThread = null;
         }
-        mConnectThread = new ConnectThread(MainActivity.this, resultDevice, app_UUID, fragment_data_handler);
+        mConnectThread = new ConnectThread(MainActivity.this, null, resultDevice, app_UUID,
+                fragment_data_handler);
         mConnectThread.start();
 
 
@@ -249,7 +296,8 @@ public class MainActivity extends AppCompatActivity {
 
     private void showSnackBar(View view, String content) {
         if (snackbar == null) {
-            snackbar = Snackbar.make(view, content, Snackbar.LENGTH_SHORT).setAction("yes", new View.OnClickListener() {
+            snackbar = Snackbar.make(view, content, Snackbar.LENGTH_SHORT).setAction("yes", new
+                    View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     finishAffinity();
@@ -261,7 +309,6 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onDestroy() {
-        System.out.println("被销毁了啦");
         unregisterReceiver(connectStateReceiver);
         //优雅的关闭线程连接
         if (mConnectThread != null) {
@@ -287,7 +334,6 @@ public class MainActivity extends AppCompatActivity {
                     break;
                 default:
                     break;
-
             }
         }
     };

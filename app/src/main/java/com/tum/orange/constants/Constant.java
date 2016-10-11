@@ -1,9 +1,10 @@
 package com.tum.orange.constants;
 
 /**
+ * constant class
  * Created by Orange on 2016/9/4.
  */
-public class ConstansForBluetoothService {
+public class Constant {
 
     public static final int MESSAGE_READ = 10;
     public static final int MESSAGE_WRITE_STREAM = 11;
@@ -27,7 +28,12 @@ public class ConstansForBluetoothService {
 
     public static final String CLEAR_TEXT = "0.00ms";
 
-    public static final String FileDirector = "TUM_Measure";
 
     public static final int REQUEST_DEVICE_INFO = 1001;
+
+    //File Path to save the data in the Storage
+    public static final String filePath = "/TUM_ExportFolder";
+    public static final String serializablePath = "/TUM_serializable";
+
 }
+

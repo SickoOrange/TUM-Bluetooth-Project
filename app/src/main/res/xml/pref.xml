@@ -1,62 +1,57 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    >
+
     <PreferenceCategory android:title="Bluetooth Device Management">
         <Preference
-            android:key="device_management_preference"
-            android:summary="Manage your Bluetooth device or connect a new Bluetooth device" />
+            android:key="deviceManagement"
+            android:summary="manage your bluetooth device connect"/>
     </PreferenceCategory>
 
     <PreferenceCategory android:title="Bluetooth Auto Connect">
         <SwitchPreference
             android:key="auto_connect_preference"
-            android:summary="It automatically tries to connect to your Bluetooth devices when Bluetooth has been turned on or when your device screen goes on" />
+            android:summary="It automatically tries to connect to your Bluetooth devices when Bluetooth has been turned on or when your device screen goes on"/>
     </PreferenceCategory>
 
 
     <PreferenceCategory android:title="File Explorer">
         <SwitchPreference
             android:key="switch_list_preference"
-            android:summary="Enable File Explorer" />
+            android:summary="Enable File Explorer"/>
         <ListPreference
             android:defaultValue="0"
             android:dependency="switch_list_preference"
             android:dialogTitle="Measure Data List "
             android:key="filelist_preference"
-            android:summary="Select the kind of data file that you would like to explore" />
+            android:summary="Select the kind of data file that you would like to explore"/>
         <ListPreference
             android:defaultValue="0"
             android:dependency="switch_list_preference"
-            android:dialogTitle="Android Development "
-            android:entries="@array/listArray"
-            android:entryValues="@array/listValues"
-            android:key="downloadType1"
-            android:summary="Delete data file that you would like to delete" />
+            android:dialogTitle="Delete List "
+            android:key="deletefile_preference"
+            android:summary="Delete data file that you would like to delete"/>
     </PreferenceCategory>
 
 
     <PreferenceCategory android:title="Launch preferences">
         <SwitchPreference
             android:key="launch_mode_preference"
-            android:summary="Show the user Guide every time when your device screen goes on" />
+            android:summary="Show the user Guide every time when your device screen goes on"/>
     </PreferenceCategory>
 
     <PreferenceCategory android:title="Emulator Mode">
         <SwitchPreference
             android:checked="false"
             android:key="emulator_mode_preference"
-            android:summary="This mode will automatic imitate Bluetooth devices and send data to the APP" />
-        <CheckBoxPreference
-            android:checked="false"
-            android:dependency="emulator_mode_preference"
-            android:key="send_data_preference"
-            android:summary="Send data to APP" />
+            android:summary="This mode will automatic imitate Bluetooth devices and send data to the APP"/>
     </PreferenceCategory>
 
 
     <PreferenceCategory android:title="Help">
         <Preference
             android:key="about_preference"
-            android:summary="About the APP" />
+            android:summary="About the APP"/>
     </PreferenceCategory>
 
 </PreferenceScreen>

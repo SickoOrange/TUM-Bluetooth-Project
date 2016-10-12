@@ -4,7 +4,6 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/TUM_LMT.iml" filepath="$PROJECT_DIR$/TUM_LMT.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/bluetooth.iml" filepath="$PROJECT_DIR$/bluetooth.iml" />
     </modules>
   </component>
 </project>

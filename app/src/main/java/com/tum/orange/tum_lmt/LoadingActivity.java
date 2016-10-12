@@ -126,6 +126,7 @@ public class LoadingActivity extends AppCompatActivity {
                 MODE_PRIVATE);
         boolean launch_mode_preference = preferences.getBoolean
                 ("launch_mode_preference", false);
+
         System.out.println("launch_mode_preference" + launch_mode_preference);
     }
 

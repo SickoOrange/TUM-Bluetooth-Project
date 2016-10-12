@@ -134,5 +134,6 @@ public class LoadingActivity extends AppCompatActivity {
     protected void onStop() {
         unregisterReceiver(enableReceiver);
         super.onStop();
+        //merge to master
     }
 }

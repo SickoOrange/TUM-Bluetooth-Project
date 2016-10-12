@@ -30,6 +30,8 @@ public class Constant {
 
 
     public static final int REQUEST_DEVICE_INFO = 1001;
+    public static final String preference_Path = "com.tum.orange" +
+            ".tum_lmt_preferences";
 
     //File Path to save the data in the Storage
     public static final String filePath = "/TUM_ExportFolder";

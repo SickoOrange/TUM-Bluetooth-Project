@@ -5,10 +5,13 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.Toast;
+
+import com.tum.orange.constants.Constant;
 
 
 public class LoadingActivity extends AppCompatActivity {
@@ -37,7 +40,8 @@ public class LoadingActivity extends AppCompatActivity {
  *      startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
  *
  *Important!!
- *The enable() method is provided only for applications that include a user interface for changing system settings,
+ *The enable() method is provided only for applications that include a user interface for
+ * changing system settings,
  *such as a "power manager" app
  * Or use for the TUM Project
  */
@@ -52,13 +56,9 @@ public class LoadingActivity extends AppCompatActivity {
                 //Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
                 //startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
             } else {
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        startActivity(new Intent(LoadingActivity.this, MainActivity.class));
-                        finish();
-                    }
-                }, 2500);
+                //蓝牙已经打开以后 直接进入主界面
+                guideView();
+                loading();
             }
         }
     }
@@ -69,7 +69,8 @@ public class LoadingActivity extends AppCompatActivity {
      * like enable,disable,turning on or turning off
      * This broadcast contains the extra fields EXTRA_STATE and EXTRA_PREVIOUS_STATE,
      * containing the new and old Bluetooth states.
-     * istening for this broadcast can be useful to detect changes made to the Bluetooth state while your app is running.
+     * istening for this broadcast can be useful to detect changes made to the Bluetooth state
+     * while your app is running.
      */
     public final BroadcastReceiver enableReceiver = new BroadcastReceiver() {
         @Override
@@ -78,16 +79,25 @@ public class LoadingActivity extends AppCompatActivity {
             if (BluetoothAdapter.ACTION_STATE_CHANGED.equals(action)) {
                 int preState = intent.getIntExtra(BluetoothAdapter.EXTRA_PREVIOUS_STATE, -1);
                 int currentState = intent.getIntExtra(BluetoothAdapter.EXTRA_STATE, -1);
-                if (currentState == BluetoothAdapter.STATE_ON && preState == BluetoothAdapter.STATE_TURNING_ON) {
-
+                if (currentState == BluetoothAdapter.STATE_ON && preState == BluetoothAdapter
+                        .STATE_TURNING_ON) {
+                    //打开蓝牙成功后 打开主页面
+                    guideView();
                     loading();
+                    Toast.makeText(getApplicationContext(), "enabling Bluetooth succeeds!", Toast
+                            .LENGTH_LONG).show();
+
                 }
 
-                if (currentState == BluetoothAdapter.STATE_OFF && preState == BluetoothAdapter.STATE_TURNING_ON) {
-                    Toast.makeText(getApplicationContext(), "Bluetooth was not enabled due to an error!", Toast.LENGTH_LONG).show();
+                if (currentState == BluetoothAdapter.STATE_OFF && preState == BluetoothAdapter
+                        .STATE_TURNING_ON) {
+                    Toast.makeText(getApplicationContext(), "Bluetooth was not enabled due to an " +
+                            "error!", Toast.LENGTH_LONG).show();
                 }
-                if (currentState == BluetoothAdapter.STATE_OFF && preState == BluetoothAdapter.STATE_TURNING_OFF) {
-                    Toast.makeText(getApplicationContext(), "Bluetooth is disable!", Toast.LENGTH_LONG).show();
+                if (currentState == BluetoothAdapter.STATE_OFF && preState == BluetoothAdapter
+                        .STATE_TURNING_OFF) {
+                    Toast.makeText(getApplicationContext(), "Bluetooth is disable!", Toast
+                            .LENGTH_LONG).show();
                 }
 
             }
@@ -101,19 +111,6 @@ public class LoadingActivity extends AppCompatActivity {
      */
 
     private void loading() {
-        /**
-         *
-         new Thread(new Runnable() {
-        @Override public void run() {
-        try {
-        Thread.sleep(1000);
-
-        } catch (InterruptedException e) {
-        e.printStackTrace();
-        }
-        }
-        }).start();
-         */
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -121,13 +118,22 @@ public class LoadingActivity extends AppCompatActivity {
                 finish();
             }
         }, 2500);
-        Toast.makeText(getApplicationContext(), "enabling Bluetooth succeeds!", Toast.LENGTH_LONG).show();
 
+    }
+
+    public void guideView() {
+        SharedPreferences preferences = getSharedPreferences(Constant.preference_Path,
+                MODE_PRIVATE);
+        boolean launch_mode_preference = preferences.getBoolean
+                ("launch_mode_preference", false);
+
+        System.out.println("launch_mode_preference" + launch_mode_preference);
     }
 
     @Override
     protected void onStop() {
         unregisterReceiver(enableReceiver);
         super.onStop();
+        //merge to master
     }
 }

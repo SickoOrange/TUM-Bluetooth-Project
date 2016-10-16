@@ -6,16 +6,17 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
+import android.support.v7.preference.PreferenceManager;
 import android.widget.Toast;
 
 import com.tum.orange.constants.Constant;
 
 
 public class LoadingActivity extends AppCompatActivity {
-    //if we use explicit action to turn on Bluetooth, we need this Filed as Reqestcode
+    //if we use explicit action to turn on Bluetooth, we need this Filed as ReqestCode
     //private static final int REQUEST_ENABLE_BT = 0;
     private BluetoothAdapter adapter;
 
@@ -48,16 +49,19 @@ public class LoadingActivity extends AppCompatActivity {
         adapter = BluetoothAdapter.getDefaultAdapter();
         if (adapter == null) {
             Toast.makeText(this, "this Device dont support Bluetooth!", Toast.LENGTH_LONG).show();
-            startActivity(new Intent(LoadingActivity.this, MainActivity.class));
+            //startActivity(new Intent(LoadingActivity.this, MainActivity.class));
+
+            loading();
         } else {
             if (!adapter.isEnabled()) {
 
                 adapter.enable();
+                //广播接受者接受反馈信息 跳入主界面
                 //Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
                 //startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
+
             } else {
-                //蓝牙已经打开以后 直接进入主界面
-                guideView();
+                //guideView();
                 loading();
             }
         }
@@ -82,11 +86,10 @@ public class LoadingActivity extends AppCompatActivity {
                 if (currentState == BluetoothAdapter.STATE_ON && preState == BluetoothAdapter
                         .STATE_TURNING_ON) {
                     //打开蓝牙成功后 打开主页面
-                    guideView();
+                    // guideView();
                     loading();
                     Toast.makeText(getApplicationContext(), "enabling Bluetooth succeeds!", Toast
                             .LENGTH_LONG).show();
-
                 }
 
                 if (currentState == BluetoothAdapter.STATE_OFF && preState == BluetoothAdapter
@@ -114,20 +117,40 @@ public class LoadingActivity extends AppCompatActivity {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                startActivity(new Intent(LoadingActivity.this, MainActivity.class));
-                finish();
+                SharedPreferences preferences = getSharedPreferences(Constant.preference_Path,
+                        MODE_PRIVATE);
+                boolean launch_mode = preferences.getBoolean
+                        ("launch_mode_preference", false);
+                if (launch_mode) {
+                    //show the guideView
+                    //TODO something
+                    showGuideView();
+                } else {
+                    //判断是否是第一次启动 如果第一次启动 显示新手引导
+                    //否则直接进入主界面
+                    SharedPreferences defaultSharedPreferences = PreferenceManager
+                            .getDefaultSharedPreferences(LoadingActivity.this);
+                    boolean isFirstStart = defaultSharedPreferences.getBoolean("isFirstStart",
+                            true);
+                    if (isFirstStart) {
+                        //显示新手引导
+                        //TODO something
+                        showGuideView();
+                    } else {
+                        //显示主界面
+                        startActivity(new Intent(LoadingActivity.this, MainActivity.class));
+                        finish();
+                    }
+                }
             }
         }, 2500);
 
     }
 
-    public void guideView() {
-        SharedPreferences preferences = getSharedPreferences(Constant.preference_Path,
-                MODE_PRIVATE);
-        boolean launch_mode_preference = preferences.getBoolean
-                ("launch_mode_preference", false);
+    public void showGuideView() {
+        startActivity(new Intent(LoadingActivity.this, GuideActivity.class));
+        finish();
 
-        System.out.println("launch_mode_preference" + launch_mode_preference);
     }
 
     @Override

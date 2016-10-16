@@ -147,5 +147,7 @@ public class Fragment_Data_ChartDisplay extends Fragment {
         set.setValueTextSize(10f);
         set.setDrawValues(true);
         return set;
+
+
     }
 }

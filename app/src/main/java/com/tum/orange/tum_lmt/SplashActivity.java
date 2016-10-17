@@ -1,14 +1,10 @@
 package com.tum.orange.tum_lmt;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-
-import com.tum.orange.CircleProgress.CircleProgress;
+import android.support.v7.app.AppCompatActivity;
 
 public class SplashActivity extends AppCompatActivity {
-
-    private CircleProgress circle_progress;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

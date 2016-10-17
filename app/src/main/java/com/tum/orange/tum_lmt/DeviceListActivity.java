@@ -28,7 +28,7 @@ import java.util.Map;
 import java.util.Set;
 
 public class DeviceListActivity extends AppCompatActivity implements ExpandableListView.OnChildClickListener {
-
+//20:16:04:11:03:12  HC-05
     private static final int REQUEST_COARSE_LOCATION_PERMISSIONS = 1000;
     private Toolbar my_toolbar_in_devicelist;
     private ActionBar actionBar;
@@ -197,7 +197,17 @@ public class DeviceListActivity extends AppCompatActivity implements ExpandableL
             String action = intent.getAction();
             if (BluetoothDevice.ACTION_FOUND.equals(action)) {
                 BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
+                //添加重复判定，防止每次搜索的时候 添加重复的设备
                 discoverDevices.add(device);
+                /*int count=discoverDevices.size();
+                if (count!=0) {
+                    BluetoothDevice[] deviceList = (BluetoothDevice[]) discoverDevices.toArray();
+                    for (int i = 0; i <count; i++) {
+                        if (deviceList[i].getAddress() != device.getAddress()) {
+                            discoverDevices.add(device);
+                        }
+                    }
+                }*/
                 //针对HC05 判空，有些设备没有Name 导致空指针异常!
                 if (device.getName() == null) {
                     Toast.makeText(getApplicationContext(), "A Device has been found: " + device.getAddress(), Toast.LENGTH_SHORT).show();

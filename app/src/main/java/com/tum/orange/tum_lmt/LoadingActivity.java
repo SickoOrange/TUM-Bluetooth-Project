@@ -5,14 +5,18 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
+import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
+import android.support.v7.preference.PreferenceManager;
 import android.widget.Toast;
+
+import com.tum.orange.constants.Constant;
 
 
 public class LoadingActivity extends AppCompatActivity {
-    //if we use explicit action to turn on Bluetooth, we need this Filed as Reqestcode
+    //if we use explicit action to turn on Bluetooth, we need this Filed as ReqestCode
     //private static final int REQUEST_ENABLE_BT = 0;
     private BluetoothAdapter adapter;
 
@@ -37,28 +41,28 @@ public class LoadingActivity extends AppCompatActivity {
  *      startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
  *
  *Important!!
- *The enable() method is provided only for applications that include a user interface for changing system settings,
+ *The enable() method is provided only for applications that include a user interface for
+ * changing system settings,
  *such as a "power manager" app
  * Or use for the TUM Project
  */
         adapter = BluetoothAdapter.getDefaultAdapter();
         if (adapter == null) {
             Toast.makeText(this, "this Device dont support Bluetooth!", Toast.LENGTH_LONG).show();
-            startActivity(new Intent(LoadingActivity.this, MainActivity.class));
+            //startActivity(new Intent(LoadingActivity.this, MainActivity.class));
+
+            loading();
         } else {
             if (!adapter.isEnabled()) {
 
                 adapter.enable();
+                //广播接受者接受反馈信息 跳入主界面
                 //Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
                 //startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
+
             } else {
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        startActivity(new Intent(LoadingActivity.this, MainActivity.class));
-                        finish();
-                    }
-                }, 2500);
+                //guideView();
+                loading();
             }
         }
     }
@@ -69,7 +73,8 @@ public class LoadingActivity extends AppCompatActivity {
      * like enable,disable,turning on or turning off
      * This broadcast contains the extra fields EXTRA_STATE and EXTRA_PREVIOUS_STATE,
      * containing the new and old Bluetooth states.
-     * istening for this broadcast can be useful to detect changes made to the Bluetooth state while your app is running.
+     * istening for this broadcast can be useful to detect changes made to the Bluetooth state
+     * while your app is running.
      */
     public final BroadcastReceiver enableReceiver = new BroadcastReceiver() {
         @Override
@@ -78,16 +83,24 @@ public class LoadingActivity extends AppCompatActivity {
             if (BluetoothAdapter.ACTION_STATE_CHANGED.equals(action)) {
                 int preState = intent.getIntExtra(BluetoothAdapter.EXTRA_PREVIOUS_STATE, -1);
                 int currentState = intent.getIntExtra(BluetoothAdapter.EXTRA_STATE, -1);
-                if (currentState == BluetoothAdapter.STATE_ON && preState == BluetoothAdapter.STATE_TURNING_ON) {
-
+                if (currentState == BluetoothAdapter.STATE_ON && preState == BluetoothAdapter
+                        .STATE_TURNING_ON) {
+                    //打开蓝牙成功后 打开主页面
+                    // guideView();
                     loading();
+                    Toast.makeText(getApplicationContext(), "enabling Bluetooth succeeds!", Toast
+                            .LENGTH_LONG).show();
                 }
 
-                if (currentState == BluetoothAdapter.STATE_OFF && preState == BluetoothAdapter.STATE_TURNING_ON) {
-                    Toast.makeText(getApplicationContext(), "Bluetooth was not enabled due to an error!", Toast.LENGTH_LONG).show();
+                if (currentState == BluetoothAdapter.STATE_OFF && preState == BluetoothAdapter
+                        .STATE_TURNING_ON) {
+                    Toast.makeText(getApplicationContext(), "Bluetooth was not enabled due to an " +
+                            "error!", Toast.LENGTH_LONG).show();
                 }
-                if (currentState == BluetoothAdapter.STATE_OFF && preState == BluetoothAdapter.STATE_TURNING_OFF) {
-                    Toast.makeText(getApplicationContext(), "Bluetooth is disable!", Toast.LENGTH_LONG).show();
+                if (currentState == BluetoothAdapter.STATE_OFF && preState == BluetoothAdapter
+                        .STATE_TURNING_OFF) {
+                    Toast.makeText(getApplicationContext(), "Bluetooth is disable!", Toast
+                            .LENGTH_LONG).show();
                 }
 
             }
@@ -101,27 +114,42 @@ public class LoadingActivity extends AppCompatActivity {
      */
 
     private void loading() {
-        /**
-         *
-         new Thread(new Runnable() {
-        @Override public void run() {
-        try {
-        Thread.sleep(1000);
-
-        } catch (InterruptedException e) {
-        e.printStackTrace();
-        }
-        }
-        }).start();
-         */
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                startActivity(new Intent(LoadingActivity.this, MainActivity.class));
-                finish();
+                SharedPreferences preferences = getSharedPreferences(Constant.preference_Path,
+                        MODE_PRIVATE);
+                boolean launch_mode = preferences.getBoolean
+                        ("launch_mode_preference", false);
+                if (launch_mode) {
+                    //show the guideView
+                    //TODO something
+                    showGuideView();
+                } else {
+                    //判断是否是第一次启动 如果第一次启动 显示新手引导
+                    //否则直接进入主界面
+                    SharedPreferences defaultSharedPreferences = PreferenceManager
+                            .getDefaultSharedPreferences(LoadingActivity.this);
+                    boolean isFirstStart = defaultSharedPreferences.getBoolean("isFirstStart",
+                            true);
+                    if (isFirstStart) {
+                        //显示新手引导
+                        //TODO something
+                        showGuideView();
+                    } else {
+                        //显示主界面
+                        startActivity(new Intent(LoadingActivity.this, MainActivity.class));
+                        finish();
+                    }
+                }
             }
         }, 2500);
-        Toast.makeText(getApplicationContext(), "enabling Bluetooth succeeds!", Toast.LENGTH_LONG).show();
+
+    }
+
+    public void showGuideView() {
+        startActivity(new Intent(LoadingActivity.this, GuideActivity.class));
+        finish();
 
     }
 
@@ -129,5 +157,6 @@ public class LoadingActivity extends AppCompatActivity {
     protected void onStop() {
         unregisterReceiver(enableReceiver);
         super.onStop();
+        //merge to master
     }
 }

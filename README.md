@@ -10,4 +10,4 @@
 * 数据发送与数据取回
 * recieve date should dynamic be shown in the line chart
 * 取回数据的动态图表化显示
-* 这是新的分支 需要加入最后的新手导入功能
+* 这是新的分支 需要加入最后的新手导入

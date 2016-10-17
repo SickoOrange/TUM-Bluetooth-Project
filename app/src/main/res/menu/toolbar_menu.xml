@@ -42,7 +42,7 @@
 
     <item
         android:id="@+id/clear"
-        android:icon="@drawable/broom"
+        android:icon="@drawable/clear"
         android:title="Clear"
         app:showAsAction="never"/>
 

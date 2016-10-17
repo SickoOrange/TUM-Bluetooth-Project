@@ -27,10 +27,10 @@
         android:layout_height="wrap_content"
         android:layout_above="@+id/guide_ll"
         android:layout_centerInParent="true"
-        android:background="@null"
+        android:background="@color/colorAccent"
         android:text="Start"
         android:textSize="20sp"
-        android:textColor="@color/colorAccent"
+        android:textColor="@color/cardview_light_background"
         android:visibility="invisible"
 
         />

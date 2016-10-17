@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -21,8 +23,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class GuideActivity extends AppCompatActivity {
-    private int[] mImages = {R.drawable.guideimage1, R.drawable.guideimage2, R.drawable
-            .guideimage3};
+    private int[] mImages = {R.drawable.guide1, R.drawable.guide2, R.drawable
+            .guide3, R.drawable.guide4, R.drawable.guide5};
     private List<View> mList = new ArrayList<View>();
     private ViewPager vp;
     private ArrayList<View> viewPoints;
@@ -120,7 +122,10 @@ public class GuideActivity extends AppCompatActivity {
         ImageView imageView = (ImageView) view.findViewById(R.id.guide_Image);
         //imageView.setImageResource(mImages[index]);
         //imageView.setBackgroundResource(mImages[index]);
-        imageView.setImageBitmap(readBitMap(this, mImages[index]));
+        Bitmap bitmap = readBitMap(this, mImages[index]);
+        Drawable drawable = new BitmapDrawable(getResources(), bitmap);
+        // imageView.setImageBitmap(readBitMap(this, mImages[index]));
+        imageView.setBackground(drawable);
         return view;
     }
 

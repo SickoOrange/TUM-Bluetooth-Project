@@ -28,7 +28,7 @@ import java.util.Map;
 import java.util.Set;
 
 public class DeviceListActivity extends AppCompatActivity implements ExpandableListView.OnChildClickListener {
-
+//20:16:04:11:03:12  HC-05
     private static final int REQUEST_COARSE_LOCATION_PERMISSIONS = 1000;
     private Toolbar my_toolbar_in_devicelist;
     private ActionBar actionBar;

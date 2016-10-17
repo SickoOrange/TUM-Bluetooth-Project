@@ -99,7 +99,17 @@ public class Fragment_Data extends Fragment {
                         return;
                     }
                     float f = Float.parseFloat(msgFromThread);
+                    //float f = Float.valueOf(msgFromThread);
+                    // System.out.println(msgFromThread);
                     addEntry(f);
+            /*        float f = 0.00f;
+                    try {
+                        float temp_f = Float.parseFloat(msgFromThread);
+                        f = temp_f;
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    addEntry(f);*/
                     break;
                 case Constant.MESSAGE_WRITE_STREAM:
                     mOutputStream = (OutputStream) msg.obj;
@@ -258,24 +268,24 @@ public class Fragment_Data extends Fragment {
             return;
         }
 
-       // File measureFolder = new File(Environment.getExternalStorageDirectory().toString() +
-             //   Constant.filePath);
+        // File measureFolder = new File(Environment.getExternalStorageDirectory().toString() +
+        //   Constant.filePath);
         File serializableFolder = new File(Environment.getExternalStorageDirectory().toString() +
                 Constant.serializablePath);
-       // if (!measureFolder.exists()) {
-     //       measureFolder.mkdir();
-       // }
+        // if (!measureFolder.exists()) {
+        //       measureFolder.mkdir();
+        // }
         if (!serializableFolder.exists()) {
             serializableFolder.mkdir();
         }
-       // writeMeasureFilePath = new File(measureFolder,
-         //       time.substring(4) + ".txt");
+        // writeMeasureFilePath = new File(measureFolder,
+        //       time.substring(4) + ".txt");
         writeSerializableFilePath = new File(serializableFolder,
                 time.substring(4) + ".txt");
 
         try {
-           // bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream
-             //       (writeMeasureFilePath)));
+            // bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream
+            //       (writeMeasureFilePath)));
             serialazableOutputStream = new ObjectOutputStream(new FileOutputStream
                     (writeSerializableFilePath));
         } catch (Exception e) {
@@ -396,7 +406,7 @@ public class Fragment_Data extends Fragment {
     }
 
     private void initChartView() {
-        mChart.setDescription("Delay");
+        mChart.setDescription("Delay Count");
         mChart.setNoDataTextDescription("暂时尚无数据");
 
         mChart.setTouchEnabled(true);
@@ -472,7 +482,7 @@ public class Fragment_Data extends Fragment {
 
     private LineDataSet createLineDataSet() {
 
-        LineDataSet set = new LineDataSet(null, "Delay Value");
+        LineDataSet set = new LineDataSet(null, "Delay Value (ms)");
         set.setAxisDependency(YAxis.AxisDependency.LEFT);
 
         // 折线的颜色

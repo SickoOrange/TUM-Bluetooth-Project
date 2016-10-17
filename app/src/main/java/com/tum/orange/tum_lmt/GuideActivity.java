@@ -1,12 +1,15 @@
 package com.tum.orange.tum_lmt;
 
 import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.preference.PreferenceManager;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -84,10 +87,10 @@ public class GuideActivity extends AppCompatActivity {
                 guide_ll.getChildAt(lastPosition).setEnabled(false);
                 lastPosition = position;
                 System.out.println(lastPosition);
-                if (position == mList.size()-1) {
+                if (position == mList.size() - 1) {
                     System.out.println("VISIBLE");
                     btn.setVisibility(View.VISIBLE);
-                }else {
+                } else {
                     btn.setVisibility(View.INVISIBLE);
                 }
             }
@@ -95,6 +98,19 @@ public class GuideActivity extends AppCompatActivity {
             @Override
             public void onPageScrollStateChanged(int state) {
 
+            }
+        });
+
+        btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //set the isFirst False, avoid to into GuideActivity
+                SharedPreferences defaultSharedPreferences = PreferenceManager
+                        .getDefaultSharedPreferences(GuideActivity.this);
+                defaultSharedPreferences.edit().putBoolean("isFirstStart", false).apply();
+                //go into MainActivity
+                startActivity(new Intent(GuideActivity.this, MainActivity.class));
+                finish();
             }
         });
     }

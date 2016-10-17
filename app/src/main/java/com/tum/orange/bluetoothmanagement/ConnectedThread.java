@@ -38,7 +38,8 @@ public class ConnectedThread extends Thread {
         mInputStream = tmpin;
         mOutputStream = tmpout;
         System.out.println("开启监听线程...");
-        fragment_data_handler.obtainMessage(Constant.MESSAGE_WRITE_STREAM, mOutputStream).sendToTarget();
+        fragment_data_handler.obtainMessage(Constant.MESSAGE_WRITE_STREAM, mOutputStream)
+                .sendToTarget();
     }
 
 
@@ -57,13 +58,14 @@ public class ConnectedThread extends Thread {
             }
 
             try {
-
                 n_bytes = mInputStream.read(buffer);
-                System.out.println("readbyte:" + n_bytes);
-                if (n_bytes >= 1 && n_bytes <= 10) {
+                if (n_bytes >1 && n_bytes <= 10) {
                     recieveMessage = new String(buffer, 0, n_bytes);
-                    System.out.println("recieveMessage from TargetDevice:" + recieveMessage);
-                    fragment_data_handler.obtainMessage(Constant.MESSAGE_READ, recieveMessage).sendToTarget();
+                    //Log.e("TEST","recieveMessage.length" + recieveMessage.length());
+                    if (recieveMessage.length() > 1) {
+                        fragment_data_handler.obtainMessage(Constant.MESSAGE_READ, recieveMessage)
+                                .sendToTarget();
+                    }
                 }
             } catch (IOException e) {
                 e.printStackTrace();

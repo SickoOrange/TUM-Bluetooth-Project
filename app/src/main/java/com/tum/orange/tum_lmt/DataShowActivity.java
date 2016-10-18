@@ -91,12 +91,10 @@ public class DataShowActivity extends AppCompatActivity {
         try {
             ObjectInputStream os = new ObjectInputStream(new FileInputStream(antiSerializableFile));
             ArrayList<MyDataBean> list = (ArrayList<MyDataBean>) os.readObject();
-            System.out.println("序列化数据列表大小:" + list.size());
             return list;
 
         } catch (Exception e) {
             e.printStackTrace();
-            System.out.println("Anti Serializable Failed!");
             return null;
         }
     }

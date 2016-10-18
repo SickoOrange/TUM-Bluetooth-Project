@@ -9,6 +9,7 @@ import com.github.mikephil.charting.highlight.Highlight;
 import com.tum.orange.tum_lmt.R;
 
 /**
+ * show the marker view in the chart
  * Created by Orange on 2016/10/9.
  */
 
@@ -39,7 +40,7 @@ public class MyCustomMarkerView extends MarkerView {
     public int getXOffset(float xpos) {
         // this will center the marker-view horizontally
         System.out.println("xpos:" + xpos);
-        return getWidth()/10;
+        return getWidth() / 10;
 
     }
 

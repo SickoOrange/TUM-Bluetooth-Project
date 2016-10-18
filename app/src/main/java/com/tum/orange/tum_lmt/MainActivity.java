@@ -12,7 +12,6 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.Message;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentTabHost;
@@ -151,26 +150,14 @@ public class MainActivity extends AppCompatActivity {
         mTabHost.setup(this, getSupportFragmentManager(), R.id.tabcontent);
         mTabHost.getTabWidget().setDividerDrawable(null); // 去掉分割线
         for (int i = 0; i < mImages.length; i++) {
-            // Tab按钮添加文字和图片
+
             TabHost.TabSpec tabSpec = mTabHost.newTabSpec(mFragmentTags[i]).setIndicator
                     (getImageView(i));
-            // 添加Fragment
+
             mTabHost.addTab(tabSpec, aClass[i], null);
-            // 设置Tab按钮的背景
+
             mTabHost.getTabWidget().getChildAt(i).setBackgroundResource(R.color.color_tabHost_bkg);
         }
-        mTabHost.setOnTabChangedListener(new TabHost.OnTabChangeListener() {
-            @Override
-            public void onTabChanged(String tabId) {
-                System.out.println(tabId);
-                if (Integer.parseInt(tabId) == 1) {
-                    System.out.println("Tab Click"+mTabHost.getCurrentTabTag());
-                    Message msg = new Message();
-                    msg.what = 1;
-                    fragment_data_handler.sendMessage(msg);
-                }
-            }
-        });
     }
 
     private View getImageView(int index) {
@@ -298,11 +285,11 @@ public class MainActivity extends AppCompatActivity {
         if (snackbar == null) {
             snackbar = Snackbar.make(view, content, Snackbar.LENGTH_SHORT).setAction("yes", new
                     View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    finishAffinity();
-                }
-            });
+                        @Override
+                        public void onClick(View v) {
+                            finishAffinity();
+                        }
+                    });
         }
         snackbar.show();
     }
@@ -310,7 +297,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         unregisterReceiver(connectStateReceiver);
-        //优雅的关闭线程连接
         if (mConnectThread != null) {
             mConnectThread.cancelConnect();
         }

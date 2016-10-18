@@ -3,6 +3,8 @@ package com.tum.orange.javabean;
 import java.io.Serializable;
 
 /**
+ * storage the receive data in the bean
+ * for serializable and anti serializable
  * Created by Orange on 28.09.2016.
  */
 public class MyDataBean implements Serializable {

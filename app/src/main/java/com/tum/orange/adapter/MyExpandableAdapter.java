@@ -15,6 +15,9 @@ import java.util.Map;
 import java.util.Set;
 
 /**
+ * this is a bluetooth device adapter
+ * set this adapter to the activity
+ * show the bondedDevices and the new bluetooth device
  * Created by Orange on 2016/8/23.
  */
 public class MyExpandableAdapter extends BaseExpandableListAdapter {

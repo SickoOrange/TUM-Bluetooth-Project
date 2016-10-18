@@ -27,8 +27,9 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-public class DeviceListActivity extends AppCompatActivity implements ExpandableListView.OnChildClickListener {
-//20:16:04:11:03:12  HC-05
+public class DeviceListActivity extends AppCompatActivity implements ExpandableListView
+        .OnChildClickListener {
+    //20:16:04:11:03:12  HC-05
     private static final int REQUEST_COARSE_LOCATION_PERMISSIONS = 1000;
     private Toolbar my_toolbar_in_devicelist;
     private ActionBar actionBar;
@@ -37,7 +38,8 @@ public class DeviceListActivity extends AppCompatActivity implements ExpandableL
     private Set<BluetoothDevice> bondedDevices = new HashSet<BluetoothDevice>();
     private Set<BluetoothDevice> discoverDevices = new HashSet<BluetoothDevice>();
     //  private List<Set<BluetoothDevice>> list;
-    private Map<String, Set<BluetoothDevice>> deviceMap = new HashMap<String, Set<BluetoothDevice>>();
+    private Map<String, Set<BluetoothDevice>> deviceMap = new HashMap<String,
+            Set<BluetoothDevice>>();
     private String[] groupName = new String[]{"Paired Devices", "Other Available Devices"};
     private MyExpandableAdapter myExpandableAdapter;
     private ShapeLoadingDialog loadingDialog;
@@ -57,8 +59,9 @@ public class DeviceListActivity extends AppCompatActivity implements ExpandableL
         setSupportActionBar(my_toolbar_in_devicelist);
 
         /**
-         * 重写Toolbar的NavigationButton的监听事件，覆盖默认实现，避免MainActivity重复创建
-         * 重写后 按钮点击行为跟Back键行为一致
+         * override the  NavigationButton listener of the Toolbar，
+         * Override the default implementation and avoid creating MainActivity repeatedly
+         * Rewrite button behavior is consistent with the Back key behavior
          */
         my_toolbar_in_devicelist.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
@@ -90,7 +93,7 @@ public class DeviceListActivity extends AppCompatActivity implements ExpandableL
         intentFilter.addAction(BluetoothAdapter.ACTION_DISCOVERY_STARTED);
         intentFilter.addAction(BluetoothAdapter.ACTION_DISCOVERY_FINISHED);
         registerReceiver(discoverReceiver, intentFilter);
-        //更次重新扫描已经配对的设备
+        //Update for the paired device
         bondedDevices = BluetoothAdapter.getDefaultAdapter().getBondedDevices();
         myExpandableAdapter.notifyDataSetChanged();
         super.onResume();
@@ -132,7 +135,8 @@ public class DeviceListActivity extends AppCompatActivity implements ExpandableL
         // bluetoothAdapter.startDiscovery();
 
         //Determine whether you have been granted a particular permission.
-        int hasPermission = ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION);
+        int hasPermission = ActivityCompat.checkSelfPermission(this, Manifest.permission
+                .ACCESS_COARSE_LOCATION);
         if (hasPermission == PackageManager.PERMISSION_GRANTED) {
             bluetoothAdapter.startDiscovery();
             return;
@@ -151,10 +155,12 @@ public class DeviceListActivity extends AppCompatActivity implements ExpandableL
      * Callback for the result from requesting permissions.
      */
     @Override
-    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[]
+            grantResults) {
         switch (requestCode) {
             case REQUEST_COARSE_LOCATION_PERMISSIONS: {
-                if (grantResults.length == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                if (grantResults.length == 1 && grantResults[0] == PackageManager
+                        .PERMISSION_GRANTED) {
                     bluetoothAdapter.startDiscovery();
                 } else {
                     Toast.makeText(this,
@@ -187,7 +193,8 @@ public class DeviceListActivity extends AppCompatActivity implements ExpandableL
 
     /**
      * must register a BroadcastReceiver for the ACTION_FOUND Intent in order to receive information
-     * about each device discovered. For each device, the system will broadcast the ACTION_FOUND Intent.
+     * about each device discovered. For each device, the system will broadcast the ACTION_FOUND
+     * Intent.
      * This Intent carries the extra fields EXTRA_DEVICE and EXTRA_CLASS,
      * containing a BluetoothDevice and a BluetoothClass,
      */
@@ -197,22 +204,16 @@ public class DeviceListActivity extends AppCompatActivity implements ExpandableL
             String action = intent.getAction();
             if (BluetoothDevice.ACTION_FOUND.equals(action)) {
                 BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
-                //添加重复判定，防止每次搜索的时候 添加重复的设备
+                //Add a decision
+                //Prevent duplicate devices from the new each search
                 discoverDevices.add(device);
-                /*int count=discoverDevices.size();
-                if (count!=0) {
-                    BluetoothDevice[] deviceList = (BluetoothDevice[]) discoverDevices.toArray();
-                    for (int i = 0; i <count; i++) {
-                        if (deviceList[i].getAddress() != device.getAddress()) {
-                            discoverDevices.add(device);
-                        }
-                    }
-                }*/
-                //针对HC05 判空，有些设备没有Name 导致空指针异常!
+
                 if (device.getName() == null) {
-                    Toast.makeText(getApplicationContext(), "A Device has been found: " + device.getAddress(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "A Device has been found: " + device
+                            .getAddress(), Toast.LENGTH_SHORT).show();
                 } else {
-                    Toast.makeText(getApplicationContext(), "A Device has been found: " + device.getName(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "A Device has been found: " + device
+                            .getName(), Toast.LENGTH_SHORT).show();
                 }
                 myExpandableAdapter.notifyDataSetChanged();
                 // deviceListView.setAdapter(myExpandableAdapter);
@@ -242,14 +243,16 @@ public class DeviceListActivity extends AppCompatActivity implements ExpandableL
 
 
     @Override
-    public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
+    public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int
+            childPosition, long id) {
         Object[] objects = deviceMap.get(groupName[groupPosition]).toArray();
         BluetoothDevice object = (BluetoothDevice) objects[childPosition];
         System.out.println(object.getName() + "..." + object.getAddress());
         Intent intent = new Intent();
         Bundle bundle = new Bundle();
         bundle.putParcelable("DEVICE_INFO", object);
-        // bundle.putStringArray("DEVICE_INFO", new String[]{object.getName(), object.getAddress()});
+        // bundle.putStringArray("DEVICE_INFO", new String[]{object.getName(), object.getAddress
+        // ()});
         intent.putExtras(bundle);
         setResult(RESULT_OK, intent);
         finish();

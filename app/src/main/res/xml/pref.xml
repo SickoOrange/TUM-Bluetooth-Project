@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+                  xmlns:app="http://schemas.android.com/apk/res-auto"
     >
 
     <PreferenceCategory android:title="Bluetooth Device Management">
@@ -15,6 +16,11 @@
     </PreferenceCategory>
 
 
+    <PreferenceCategory android:title="Launch preferences">
+        <SwitchPreference
+            android:key="launch_mode_preference"
+            android:summary="Show the user Guide every time when your device screen goes on"/>
+    </PreferenceCategory>
     <PreferenceCategory android:title="File Explorer">
         <SwitchPreference
             android:key="switch_list_preference"
@@ -34,12 +40,6 @@
     </PreferenceCategory>
 
 
-    <PreferenceCategory android:title="Launch preferences">
-        <SwitchPreference
-            android:key="launch_mode_preference"
-            android:summary="Show the user Guide every time when your device screen goes on"/>
-    </PreferenceCategory>
-
     <PreferenceCategory android:title="Emulator Mode">
         <SwitchPreference
             android:checked="false"
@@ -52,6 +52,10 @@
         <Preference
             android:key="about_preference"
             android:summary="About the APP"/>
+        <Preference android:summary="Github Repositories Link" >
+            <intent android:action="android.intent.action.VIEW"
+                    android:data="https://github.com/SickoOrange/bluetooth" />
+        </Preference>
     </PreferenceCategory>
 
 </PreferenceScreen>

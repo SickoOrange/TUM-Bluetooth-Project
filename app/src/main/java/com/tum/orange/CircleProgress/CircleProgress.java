@@ -37,6 +37,7 @@ public class CircleProgress extends View {
 
     public CircleProgress(Context context) {
         super(context);
+
         init(null, 0);
     }
 

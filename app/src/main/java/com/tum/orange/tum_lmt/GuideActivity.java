@@ -51,7 +51,7 @@ public class GuideActivity extends AppCompatActivity {
         for (int i = 0; i < mImages.length; i++) {
             view = getImageView(i);
             mList.add(view);
-            //加载小白点指示器
+
             point = new View(this);
             point.setBackgroundResource(R.drawable.indicator_selector);
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(20, 20);
@@ -68,7 +68,6 @@ public class GuideActivity extends AppCompatActivity {
         opt.inPreferredConfig = Bitmap.Config.RGB_565;
         opt.inPurgeable = true;
         opt.inInputShareable = true;
-        //获取资源图片  
         InputStream is = context.getResources().openRawResource(resId);
         return BitmapFactory.decodeStream(is, null, opt);
     }

@@ -24,52 +24,50 @@ public class ConnectedThread extends Thread {
     public ConnectedThread(BluetoothSocket mSocket, Handler fragment_data_handler) {
         this.mSocket = mSocket;
         this.fragment_data_handler = fragment_data_handler;
-        InputStream tmpin = null;
-        OutputStream tmpout = null;
+        InputStream tempIn = null;
+        OutputStream tempOut = null;
         //get the bluetooth input and output streams
         if (mSocket != null && mSocket.isConnected()) {
             try {
-                tmpin = mSocket.getInputStream();
-                tmpout = mSocket.getOutputStream();
+                tempIn = mSocket.getInputStream();
+                tempOut = mSocket.getOutputStream();
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
-        mInputStream = tmpin;
-        mOutputStream = tmpout;
-        System.out.println("开启监听线程...");
+        mInputStream = tempIn;
+        mOutputStream = tempOut;
+        //System.out.println("start for listen...");
         fragment_data_handler.obtainMessage(Constant.MESSAGE_WRITE_STREAM, mOutputStream)
                 .sendToTarget();
     }
 
 
     /**
-     * keep listening to the Inputstream while connected
+     * keep listening to the InputStream while connected
      */
     @Override
     public void run() {
         byte buffer[] = new byte[1024];
         int n_bytes;
-        String recieveMessage;
-        System.out.println("开始准备接受数据...");
+        String receiveMessage;
         while (true) {
             if (!mSocket.isConnected()) {
                 break;
             }
-
             try {
                 n_bytes = mInputStream.read(buffer);
-                if (n_bytes >1 && n_bytes <= 10) {
-                    recieveMessage = new String(buffer, 0, n_bytes);
-                    //Log.e("TEST","recieveMessage.length" + recieveMessage.length());
-                    if (recieveMessage.length() > 1) {
-                        fragment_data_handler.obtainMessage(Constant.MESSAGE_READ, recieveMessage)
+                if (n_bytes > 1 && n_bytes <= 10) {
+                    receiveMessage = new String(buffer, 0, n_bytes);
+                    //Log.e("TEST","receiveMessage.length" + receiveMessage.length());
+                    if (receiveMessage.length() > 1) {
+                        fragment_data_handler.obtainMessage(Constant.MESSAGE_READ, receiveMessage)
                                 .sendToTarget();
                     }
                 }
             } catch (IOException e) {
                 e.printStackTrace();
-                System.out.println("接收数据异常...");
+                System.out.println("Receive Exception");
                 try {
                     mOutputStream.close();
                 } catch (IOException e1) {
@@ -79,12 +77,4 @@ public class ConnectedThread extends Thread {
         }
     }
 
-
-    public void cancel() {
-        try {
-            mSocket.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
 }

@@ -21,7 +21,7 @@ import com.tum.orange.tum_lmt.R;
 public class Fragment_Setting extends Fragment {
 
     private TextView tv_data_1;
-    private View mViewContent; // 缓存视图内容
+    private View mViewContent;
     public Handler handler;
 
     @Nullable
@@ -54,7 +54,6 @@ public class Fragment_Setting extends Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        // 显示Fragment的Tag信息
         tv_data_1.setText("Fragment:" + getTag());
     }
 
@@ -103,8 +102,5 @@ public class Fragment_Setting extends Fragment {
         Log.e("main", "onDetach2");
     }
 
-    public void printfragment2() {
-        System.out.println("this is fragment2");
-    }
 }
 

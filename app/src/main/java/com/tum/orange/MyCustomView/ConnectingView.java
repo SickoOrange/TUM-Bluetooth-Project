@@ -18,12 +18,11 @@ public class ConnectingView extends View {
     private int mWidth;
     private int mHeight;
 
-    //定义旋转的小圆球的默认半径
     private int mCircleRadius = 30;
 
     private float mDegree;
     private float mOffset;
-    //偏移百分比
+
     private int mCirclePositiveShrinkPercent;
     private int mCircleNegativePercent;
 
@@ -33,7 +32,6 @@ public class ConnectingView extends View {
 
     public ConnectingView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        //初始化画板
         init();
     }
 
@@ -82,37 +80,26 @@ public class ConnectingView extends View {
         if (mDegree == 360f) {
             mDegree = 0;
         }
-        //旋转画布 造成旋转的效果
         canvas.rotate(mDegree, mWidth / 2, mHeight / 2);
-        //两个小圆点互相靠近的距离 不断变化
         if (mCirclePositiveShrinkPercent < 100) {
             mOffset = (mHeight / 2 - mCircleRadius) * (mCirclePositiveShrinkPercent / 100f);
-            //绘制下降小红点
             canvas.drawCircle(mWidth / 2, mCircleRadius + mOffset, mCircleRadius, mPaintOne);
-            //绘制上升小蓝点
             canvas.drawCircle(mWidth / 2, mHeight - mCircleRadius - mOffset, mCircleRadius, mPaintTwo);
-            //改变偏移百分比
             mCirclePositiveShrinkPercent += 1f;
         } else {
             if (mCircleNegativePercent < 100) {
                 mOffset = (mHeight / 2 - mCircleRadius) * (mCircleNegativePercent / 100f);
-                //绘制上升小红点
                 canvas.drawCircle(mWidth / 2, mHeight / 2 - mOffset, mCircleRadius, mPaintOne);
-                //绘制下降小圆点
                 canvas.drawCircle(mWidth / 2, mHeight / 2 + mOffset, mCircleRadius, mPaintTwo);
-                //改变偏移百分比
                 mCircleNegativePercent += 1f;
             } else {
-                //实现在边缘处平滑的滑动
                 canvas.drawCircle(mWidth / 2, mCircleRadius, mCircleRadius, mPaintOne);
                 canvas.drawCircle(mWidth / 2, mHeight - mCircleRadius, mCircleRadius, mPaintTwo);
-                //重置偏移变量 循环
                 mCirclePositiveShrinkPercent = 0;
                 mCircleNegativePercent = 0;
             }
         }
 
-        //刷新 重绘
         invalidate();
         super.onDraw(canvas);
     }

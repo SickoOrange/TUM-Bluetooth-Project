@@ -56,7 +56,6 @@ public class LoadingActivity extends AppCompatActivity {
             if (!adapter.isEnabled()) {
 
                 adapter.enable();
-                //广播接受者接受反馈信息 跳入主界面
                 //Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
                 //startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
 
@@ -85,8 +84,6 @@ public class LoadingActivity extends AppCompatActivity {
                 int currentState = intent.getIntExtra(BluetoothAdapter.EXTRA_STATE, -1);
                 if (currentState == BluetoothAdapter.STATE_ON && preState == BluetoothAdapter
                         .STATE_TURNING_ON) {
-                    //打开蓝牙成功后 打开主页面
-                    // guideView();
                     loading();
                     Toast.makeText(getApplicationContext(), "enabling Bluetooth succeeds!", Toast
                             .LENGTH_LONG).show();
@@ -122,22 +119,17 @@ public class LoadingActivity extends AppCompatActivity {
                 boolean launch_mode = preferences.getBoolean
                         ("launch_mode_preference", false);
                 if (launch_mode) {
-                    //show the guideView
-                    //TODO something
                     showGuideView();
                 } else {
-                    //判断是否是第一次启动 如果第一次启动 显示新手引导
-                    //否则直接进入主界面
                     SharedPreferences defaultSharedPreferences = PreferenceManager
                             .getDefaultSharedPreferences(LoadingActivity.this);
                     boolean isFirstStart = defaultSharedPreferences.getBoolean("isFirstStart",
                             true);
                     if (isFirstStart) {
-                        //显示新手引导
-                        //TODO something
+
                         showGuideView();
                     } else {
-                        //显示主界面
+
                         startActivity(new Intent(LoadingActivity.this, MainActivity.class));
                         finish();
                     }
@@ -157,6 +149,6 @@ public class LoadingActivity extends AppCompatActivity {
     protected void onStop() {
         unregisterReceiver(enableReceiver);
         super.onStop();
-        //merge to master
+
     }
 }

@@ -65,7 +65,7 @@ public class Fragment_Data_RecyclerView extends Fragment {
         LinearLayoutManager manager = new LinearLayoutManager(mActivity);
         manager.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(manager);
-        //设置分隔线 Adapter
+
         recyclerView.setAdapter(new MyRecyclerViewAdapter(mActivity));
     }
 
@@ -156,7 +156,6 @@ public class Fragment_Data_RecyclerView extends Fragment {
         try {
             ObjectInputStream os = new ObjectInputStream(new FileInputStream(antiSerializableFile));
             ArrayList<MyDataBean> list = (ArrayList<MyDataBean>) os.readObject();
-            System.out.println("序列化数据列表大小:" + list.size());
             return list;
 
         } catch (Exception e) {

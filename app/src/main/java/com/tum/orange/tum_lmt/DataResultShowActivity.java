@@ -144,7 +144,6 @@ public class DataResultShowActivity extends AppCompatActivity implements TabLayo
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.saveInPhone) {
-            //保存txt文件到手机内存中
             System.out.println("Save----------------");
             save();
         }

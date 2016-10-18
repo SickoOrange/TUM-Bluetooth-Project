@@ -2,7 +2,6 @@ package com.tum.orange.fragment;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
@@ -11,25 +10,17 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.preference.ListPreference;
 import android.support.v7.preference.Preference;
 import android.support.v7.preference.PreferenceFragmentCompat;
-import android.support.v7.widget.CardView;
 import android.util.Log;
-import android.view.View;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.tum.orange.bluetoothmanagement.EmulatorThread;
 import com.tum.orange.constants.Constant;
-import com.tum.orange.javabean.MyDataBean;
 import com.tum.orange.tum_lmt.DataResultShowActivity;
 import com.tum.orange.tum_lmt.DeviceListActivity;
 import com.tum.orange.tum_lmt.MainActivity;
 import com.tum.orange.tum_lmt.R;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.ObjectInputStream;
-import java.util.ArrayList;
 
 /**
  * Preference setting
@@ -46,6 +37,8 @@ public class MyPreferenceFragment extends PreferenceFragmentCompat {
     private EmulatorThread emulatorThread;
     private MainActivity mainActivity;
     private ListPreference deletefile_preference;
+    private Preference about_preference;
+    private Preference github_preference;
 
 
     @Override
@@ -76,7 +69,8 @@ public class MyPreferenceFragment extends PreferenceFragmentCompat {
         deviceManagement.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
-                startActivityForResult(new Intent(mainActivity, DeviceListActivity.class), Constant.REQUEST_DEVICE_INFO);
+                startActivityForResult(new Intent(mainActivity, DeviceListActivity.class),
+                        Constant.REQUEST_DEVICE_INFO);
                 return false;
             }
         });
@@ -86,6 +80,9 @@ public class MyPreferenceFragment extends PreferenceFragmentCompat {
         emulator_mode_preference = (SwitchPreference) findPreference("emulator_mode_preference");
         deletefile_preference = (ListPreference) findPreference
                 ("deletefile_preference");
+        about_preference = findPreference("about_preference");
+        github_preference = findPreference("github_preference");
+
 
         /**
          * show the all delete data file in the ListPreference
@@ -212,9 +209,32 @@ public class MyPreferenceFragment extends PreferenceFragmentCompat {
             }
         });
 
+
+        /**
+         * this is a text preference
+         * tell you what about this tum project
+         */
+        about_preference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                new AlertDialog.Builder(mainActivity).setTitle("About").setMessage("The LMT has a" +
+                        " portable measurement device based on an Arduino that can measure the " +
+                        "latency in video transmission. The students task is to improve the " +
+                        "Android application with which the Arduino system can be controlled " +
+                        "wirelessly via Bluetooth to make the measurement truly portable. " +
+                        "Furthermore, the app shall guide an unexperienced user through setup of " +
+                        "the Arduino, the measurement process and present the results at the end " +
+                        "of the measurement in an understandable way")
+                        .show();
+                return false;
+            }
+        });
+
+
     }
 
-    private void antiSerializable(String name, MainActivity activity) {
+
+    /*private void antiSerializable(String name, MainActivity activity) {
         try {
             ObjectInputStream ois = new ObjectInputStream(new FileInputStream(new File(file,
                     name)));
@@ -235,12 +255,11 @@ public class MyPreferenceFragment extends PreferenceFragmentCompat {
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
+    }*/
 
 
     @Override
     public void onDestroy() {
-        System.out.println("Preference被关闭了");
         emulatorThread.isFinished = true;
         super.onDestroy();
     }

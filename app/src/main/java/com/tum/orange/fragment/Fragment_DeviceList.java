@@ -1,4 +1,4 @@
-package com.tum.orange.tum_lmt;
+package com.tum.orange.fragment;
 
 import android.Manifest;
 import android.bluetooth.BluetoothAdapter;
@@ -9,18 +9,22 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
-import android.view.MenuItem;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ExpandableListView;
 import android.widget.Toast;
 
 import com.mingle.widget.ShapeLoadingDialog;
 import com.tum.orange.adapter.MyExpandableAdapter;
+import com.tum.orange.tum_lmt.MainActivity;
+import com.tum.orange.tum_lmt.R;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -28,11 +32,11 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * we don't need this class anymore
- * but we can also not delete this class
- * because we will maybe use it in the future
+ * show the device list in the fragment
+ * Created by Orange on 20.10.2016.
  */
-public class DeviceListActivity extends AppCompatActivity implements ExpandableListView
+
+public class Fragment_DeviceList extends Fragment implements ExpandableListView
         .OnChildClickListener {
     //20:16:04:11:03:12  HC-05
     private static final int REQUEST_COARSE_LOCATION_PERMISSIONS = 1000;
@@ -50,36 +54,25 @@ public class DeviceListActivity extends AppCompatActivity implements ExpandableL
     private ShapeLoadingDialog loadingDialog;
 
 
-    //Paired Devices or Other Available Devices to Scanning for devices
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_device_list);
+    private View mContainerView;
+    private MainActivity mActivity;
+    private FloatingActionButton floatingActionButton;
 
-        loadingDialog = new ShapeLoadingDialog(this);
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        mActivity = (MainActivity) context;
+        loadingDialog = new ShapeLoadingDialog(mActivity);
         loadingDialog.setLoadingText("searching a new Device...");
         loadingDialog.setCanceledOnTouchOutside(false);
+    }
 
-        my_toolbar_in_devicelist = (Toolbar) findViewById(R.id.my_toolbar_in_devicelist);
-        setSupportActionBar(my_toolbar_in_devicelist);
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable
+            Bundle savedInstanceState) {
 
-        /**
-         * override the  NavigationButton listener of the Toolbar，
-         * Override the default implementation and avoid creating MainActivity repeatedly
-         * Rewrite button behavior is consistent with the Back key behavior
-         */
-        my_toolbar_in_devicelist.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onBackPressed();
-            }
-        });
-        actionBar = getSupportActionBar();
-        if (actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(true);
-            actionBar.setTitle("Select a device to connect");
-        }
-
+        mContainerView = inflater.inflate(R.layout.fragment_device_list, null);
         /**
          * MVC Module to design the expandable device ListView
          * M Module
@@ -89,24 +82,22 @@ public class DeviceListActivity extends AppCompatActivity implements ExpandableL
         initView();
         initData();
         initController();
-    }
-
-    @Override
-    protected void onResume() {
-        IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction(BluetoothDevice.ACTION_FOUND);
-        intentFilter.addAction(BluetoothAdapter.ACTION_DISCOVERY_STARTED);
-        intentFilter.addAction(BluetoothAdapter.ACTION_DISCOVERY_FINISHED);
-        registerReceiver(discoverReceiver, intentFilter);
-        //Update for the paired device
-        bondedDevices = BluetoothAdapter.getDefaultAdapter().getBondedDevices();
-        myExpandableAdapter.notifyDataSetChanged();
-        super.onResume();
+        return mContainerView;
     }
 
     private void initView() {
-        deviceListView = (ExpandableListView) findViewById(R.id.expandable_device_ListView);
+        deviceListView = (ExpandableListView) mContainerView.findViewById(R.id
+                .expandable_device_ListView);
+        floatingActionButton = (FloatingActionButton) mContainerView.findViewById(R.id
+                .device_search);
         deviceListView.setOnChildClickListener(this);
+        floatingActionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //Start to discover the new Device
+                Discovering();
+            }
+        });
     }
 
     private void initData() {
@@ -117,14 +108,13 @@ public class DeviceListActivity extends AppCompatActivity implements ExpandableL
         deviceMap.put("Other Available Devices", discoverDevices);
     }
 
-
     private void Querying() {
         bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         bondedDevices = bluetoothAdapter.getBondedDevices();
     }
 
     private void initController() {
-        myExpandableAdapter = new MyExpandableAdapter(this, groupName, deviceMap);
+        myExpandableAdapter = new MyExpandableAdapter(mActivity, groupName, deviceMap);
         deviceListView.setAdapter(myExpandableAdapter);
         deviceListView.expandGroup(0);
         deviceListView.expandGroup(1);
@@ -137,23 +127,23 @@ public class DeviceListActivity extends AppCompatActivity implements ExpandableL
      * asynchronous call, return immediately
      */
     private void Discovering() {
-        // bluetoothAdapter.startDiscovery();
-
+        bluetoothAdapter.cancelDiscovery();
         //Determine whether you have been granted a particular permission.
-        int hasPermission = ActivityCompat.checkSelfPermission(this, Manifest.permission
+        int hasPermission = ActivityCompat.checkSelfPermission(mActivity, Manifest.permission
                 .ACCESS_COARSE_LOCATION);
         if (hasPermission == PackageManager.PERMISSION_GRANTED) {
+            discoverDevices.clear();
+            myExpandableAdapter.notifyDataSetChanged();
             bluetoothAdapter.startDiscovery();
             return;
         }
 
         //Requests permissions to be granted to this application.
         //in order to support API 23 Android 6.0; We must do this
-        ActivityCompat.requestPermissions(DeviceListActivity.this,
+        ActivityCompat.requestPermissions(mActivity,
                 new String[]{
                         android.Manifest.permission.ACCESS_COARSE_LOCATION},
                 REQUEST_COARSE_LOCATION_PERMISSIONS);
-
     }
 
     /**
@@ -168,7 +158,7 @@ public class DeviceListActivity extends AppCompatActivity implements ExpandableL
                         .PERMISSION_GRANTED) {
                     bluetoothAdapter.startDiscovery();
                 } else {
-                    Toast.makeText(this,
+                    Toast.makeText(mActivity,
                             "no permissions",
                             Toast.LENGTH_LONG).show();
                     bluetoothAdapter.cancelDiscovery();
@@ -180,20 +170,16 @@ public class DeviceListActivity extends AppCompatActivity implements ExpandableL
 
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.toolbar_menu_in_devicelist, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.action_search) {
-            //Start to discover the new Device
-            Discovering();
-        }
-
-
-        return super.onOptionsItemSelected(item);
+    public void onResume() {
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(BluetoothDevice.ACTION_FOUND);
+        intentFilter.addAction(BluetoothAdapter.ACTION_DISCOVERY_STARTED);
+        intentFilter.addAction(BluetoothAdapter.ACTION_DISCOVERY_FINISHED);
+        mActivity.registerReceiver(discoverReceiver, intentFilter);
+        //Update for the paired device
+        bondedDevices = BluetoothAdapter.getDefaultAdapter().getBondedDevices();
+        myExpandableAdapter.notifyDataSetChanged();
+        super.onResume();
     }
 
     /**
@@ -214,10 +200,10 @@ public class DeviceListActivity extends AppCompatActivity implements ExpandableL
                 discoverDevices.add(device);
 
                 if (device.getName() == null) {
-                    Toast.makeText(getApplicationContext(), "A Device has been found: " + device
+                    Toast.makeText(mActivity, "A Device has been found: " + device
                             .getAddress(), Toast.LENGTH_SHORT).show();
                 } else {
-                    Toast.makeText(getApplicationContext(), "A Device has been found: " + device
+                    Toast.makeText(mActivity, "A Device has been found: " + device
                             .getName(), Toast.LENGTH_SHORT).show();
                 }
                 myExpandableAdapter.notifyDataSetChanged();
@@ -228,24 +214,16 @@ public class DeviceListActivity extends AppCompatActivity implements ExpandableL
             } else if (BluetoothAdapter.ACTION_DISCOVERY_FINISHED.equals(action)) {
                 System.out.println("Discovery finished");
                 loadingDialog.dismiss();
-
-
             }
         }
     };
 
-
-    /**
-     * Unregister a previously registered BroadcastReceiver.
-     * All filters that have been registered for this BroadcastReceiver will be removed.
-     */
     @Override
-    protected void onPause() {
-        bluetoothAdapter.cancelDiscovery();
-        unregisterReceiver(discoverReceiver);
+    public void onPause() {
         super.onPause();
+        bluetoothAdapter.cancelDiscovery();
+        mActivity.unregisterReceiver(discoverReceiver);
     }
-
 
     @Override
     public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int
@@ -253,14 +231,7 @@ public class DeviceListActivity extends AppCompatActivity implements ExpandableL
         Object[] objects = deviceMap.get(groupName[groupPosition]).toArray();
         BluetoothDevice object = (BluetoothDevice) objects[childPosition];
         System.out.println(object.getName() + "..." + object.getAddress());
-        Intent intent = new Intent();
-        Bundle bundle = new Bundle();
-        bundle.putParcelable("DEVICE_INFO", object);
-        // bundle.putStringArray("DEVICE_INFO", new String[]{object.getName(), object.getAddress
-        // ()});
-        intent.putExtras(bundle);
-        setResult(RESULT_OK, intent);
-        finish();
+        mActivity.connectToRemoteDevice(object);
         return true;
     }
 }

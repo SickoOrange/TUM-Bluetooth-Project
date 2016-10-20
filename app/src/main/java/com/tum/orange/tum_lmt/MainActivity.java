@@ -33,6 +33,7 @@ import com.tum.orange.bluetoothmanagement.ConnectThread;
 import com.tum.orange.bluetoothmanagement.ConnectedThread;
 import com.tum.orange.constants.Constant;
 import com.tum.orange.fragment.Fragment_Data;
+import com.tum.orange.fragment.Fragment_DeviceList;
 import com.tum.orange.fragment.MyPreferenceFragment;
 
 import java.lang.reflect.Method;
@@ -53,13 +54,7 @@ public class MainActivity extends AppCompatActivity {
             R.drawable.tab_center,
             R.drawable.tab_counter,
     };
-    private Class[] aClass = {Fragment_Data.class, MyPreferenceFragment.class};
 
-    // Fragment Tag
-    private String mFragmentTags[] = {
-            "0",
-            "1",
-    };
     private BluetoothDevice resultDevice;
     private BluetoothAdapter adapter;
     private BluetoothSocket btSocket;
@@ -70,6 +65,8 @@ public class MainActivity extends AppCompatActivity {
     private Fragment_Data fragment_data;
     private MyPreferenceFragment myPreferenceFragment;
     private ActionBarDrawerToggle toggle;
+    private Fragment_DeviceList fragment_deviceList;
+
 
     public void setHandler(Handler handler) {
         fragment_data_handler = handler;
@@ -150,6 +147,7 @@ public class MainActivity extends AppCompatActivity {
         my_toolbar = (Toolbar) findViewById(R.id.my_toolbar);
         fragment_data = new Fragment_Data();
         myPreferenceFragment = new MyPreferenceFragment();
+        fragment_deviceList = new Fragment_DeviceList();
         //my_toolbar.setOverflowIcon(getResources().getDrawable(R.drawable.menu_overflow));
         my_toolbar.setNavigationIcon(R.drawable.menu_overflow);
         setSupportActionBar(my_toolbar);
@@ -165,8 +163,12 @@ public class MainActivity extends AppCompatActivity {
                         .open, R.string.close);
         drawerLayout.addDrawerListener(toggle);
 
-        getSupportFragmentManager().beginTransaction().replace(R.id.frame_content, fragment_data)
-                .commit();
+        getSupportFragmentManager().beginTransaction().add(R.id.frame_content, fragment_data).add
+                (R.id.frame_content, fragment_deviceList).add(R.id.frame_content,
+                myPreferenceFragment).hide(fragment_deviceList).hide(myPreferenceFragment).commit();
+
+
+
         navigationView.getMenu().getItem(0).setChecked(true);
 
         navigationView.setNavigationItemSelectedListener(new NavigationView
@@ -176,31 +178,29 @@ public class MainActivity extends AppCompatActivity {
                 item.setChecked(true);
                 switch (item.getItemId()) {
                     case R.id.nav_live_measurement:
-                        if (myPreferenceFragment.isAdded()) {
-                            getSupportFragmentManager().beginTransaction().hide
-                                    (myPreferenceFragment)
-                                    .show(fragment_data).commit();
-                        }
+                        getSupportFragmentManager().beginTransaction().hide
+                                (myPreferenceFragment).hide(fragment_deviceList)
+                                .show(fragment_data).commit();
+
+
                         drawerLayout.closeDrawers();
                         break;
                     case R.id.nav_data_representation:
                         drawerLayout.closeDrawers();
                         break;
                     case R.id.nav_device:
-                        System.out.println("start device");
-                        startActivityForResult(new Intent(MainActivity.this, DeviceListActivity
+                        /*startActivityForResult(new Intent(MainActivity.this, DeviceListActivity
                                         .class),
-                                Constant.REQUEST_DEVICE_INFO);
+                                Constant.REQUEST_DEVICE_INFO);*/
+                        getSupportFragmentManager().beginTransaction().hide
+                                (myPreferenceFragment).hide(fragment_data)
+                                .show(fragment_deviceList).commit();
                         drawerLayout.closeDrawers();
                         break;
                     case R.id.nav_setting:
-                        if (!myPreferenceFragment.isAdded()) {
-                            getSupportFragmentManager().beginTransaction().hide(fragment_data)
-                                    .add(R.id.frame_content, myPreferenceFragment).commit();
-                        } else {
-                            getSupportFragmentManager().beginTransaction().hide(fragment_data)
-                                    .show(myPreferenceFragment).commit();
-                        }
+                        getSupportFragmentManager().beginTransaction().hide
+                                (fragment_deviceList).hide(fragment_data)
+                                .show(myPreferenceFragment).commit();
                         drawerLayout.closeDrawers();
                         break;
 
@@ -239,7 +239,8 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.toolbar_menu, menu);
+                getMenuInflater().inflate(R.menu.toolbar_menu, menu);
+
         return true;
     }
 
@@ -333,7 +334,7 @@ public class MainActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
     }
 
-    private void connectToRemoteDevice(BluetoothDevice resultDevice) {
+    public void connectToRemoteDevice(BluetoothDevice resultDevice) {
         if (mConnectThread != null) {
             mConnectThread.cancelConnect();
             mConnectThread = null;

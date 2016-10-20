@@ -43,6 +43,7 @@
         app:showAsAction="never"/>
     <item
         android:id="@+id/action_device"
+        android:icon="@drawable/deviceicon"
         android:title="Device"
         app:showAsAction="never"
         />

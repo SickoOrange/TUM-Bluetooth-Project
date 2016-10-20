@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_live_measurement"
+            android:icon="@drawable/ic_equalizer_black_36dp"
+            android:title="Live Measurement"
+            />
+        <item
+            android:id="@+id/nav_data_representation"
+            android:icon="@drawable/ic_graphic_eq_black_36dp"
+            android:title="Data Representation"/>
+        <item
+            android:id="@+id/nav_device"
+            android:icon="@drawable/ic_devices_black_36dp"
+            android:title="Device"/>
+        <item
+            android:id="@+id/nav_setting"
+            android:icon="@drawable/ic_settings_black_36dp"
+            android:title="Setting"/>
+    </group>
+
+</menu>

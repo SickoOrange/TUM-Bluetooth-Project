@@ -12,11 +12,14 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentTabHost;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -24,7 +27,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.TabHost;
 import android.widget.Toast;
 
 import com.tum.orange.bluetoothmanagement.ConnectThread;
@@ -63,11 +65,16 @@ public class MainActivity extends AppCompatActivity {
     private BluetoothSocket btSocket;
     private Boolean isStarted = false;
     private SharedPreferences auto_connect_sharedPreference;
+    private DrawerLayout drawerLayout;
+    private NavigationView navigationView;
+    private Fragment_Data fragment_data;
+    private MyPreferenceFragment myPreferenceFragment;
+    private ActionBarDrawerToggle toggle;
 
     public void setHandler(Handler handler) {
         fragment_data_handler = handler;
         getSharedPreferences("com.tum.orange.tum_lmt_preferences", MODE_PRIVATE).edit()
-                .putBoolean("emulator_mode_preference", false).commit();
+                .putBoolean("emulator_mode_preference", false).apply();
         auto_connect_sharedPreference = getSharedPreferences("com.tum.orange" +
                 ".tum_lmt_preferences", MODE_PRIVATE);
         boolean auto_connect_mode = auto_connect_sharedPreference.getBoolean
@@ -138,15 +145,77 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void init_view() {
+        drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        navigationView = (NavigationView) findViewById(R.id.navigation_view);
         my_toolbar = (Toolbar) findViewById(R.id.my_toolbar);
-        my_toolbar.setOverflowIcon(getResources().getDrawable(R.drawable.menu_overflow));
+        fragment_data = new Fragment_Data();
+        myPreferenceFragment = new MyPreferenceFragment();
+        //my_toolbar.setOverflowIcon(getResources().getDrawable(R.drawable.menu_overflow));
+        my_toolbar.setNavigationIcon(R.drawable.menu_overflow);
         setSupportActionBar(my_toolbar);
         ActionBar actionBar = getSupportActionBar();
 
         if (actionBar != null) {
             actionBar.setTitle("No Connection");
+            actionBar.setDisplayHomeAsUpEnabled(true);
         }
-        mTabHost = (FragmentTabHost) findViewById(android.R.id.tabhost);
+
+        toggle = new ActionBarDrawerToggle(this, drawerLayout, my_toolbar,
+                R.string
+                        .open, R.string.close);
+        drawerLayout.addDrawerListener(toggle);
+
+        getSupportFragmentManager().beginTransaction().replace(R.id.frame_content, fragment_data)
+                .commit();
+        navigationView.getMenu().getItem(0).setChecked(true);
+
+        navigationView.setNavigationItemSelectedListener(new NavigationView
+                .OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(MenuItem item) {
+                item.setChecked(true);
+                switch (item.getItemId()) {
+                    case R.id.nav_live_measurement:
+                        if (myPreferenceFragment.isAdded()) {
+                            getSupportFragmentManager().beginTransaction().hide
+                                    (myPreferenceFragment)
+                                    .show(fragment_data).commit();
+                        }
+                        drawerLayout.closeDrawers();
+                        break;
+                    case R.id.nav_data_representation:
+                        drawerLayout.closeDrawers();
+                        break;
+                    case R.id.nav_device:
+                        System.out.println("start device");
+                        startActivityForResult(new Intent(MainActivity.this, DeviceListActivity
+                                        .class),
+                                Constant.REQUEST_DEVICE_INFO);
+                        drawerLayout.closeDrawers();
+                        break;
+                    case R.id.nav_setting:
+                        if (!myPreferenceFragment.isAdded()) {
+                            getSupportFragmentManager().beginTransaction().hide(fragment_data)
+                                    .add(R.id.frame_content, myPreferenceFragment).commit();
+                        } else {
+                            getSupportFragmentManager().beginTransaction().hide(fragment_data)
+                                    .show(myPreferenceFragment).commit();
+                        }
+                        drawerLayout.closeDrawers();
+                        break;
+
+                }
+                return false;
+            }
+        });
+
+
+       /* Resources resource = getBaseContext().getResources();
+        ColorStateList csl = resource.getColorStateList(R.color.navigation_menu_item_color);
+        navigationView.setItemTextColor(csl);*/
+
+
+       /* mTabHost = (FragmentTabHost) findViewById(android.R.id.tabhost);
         mTabHost.setup(this, getSupportFragmentManager(), R.id.tabcontent);
         mTabHost.getTabWidget().setDividerDrawable(null); // 去掉分割线
         for (int i = 0; i < mImages.length; i++) {
@@ -157,7 +226,7 @@ public class MainActivity extends AppCompatActivity {
             mTabHost.addTab(tabSpec, aClass[i], null);
 
             mTabHost.getTabWidget().getChildAt(i).setBackgroundResource(R.color.color_tabHost_bkg);
-        }
+        }*/
     }
 
     private View getImageView(int index) {

@@ -78,6 +78,8 @@ public class Fragment_Setting extends Fragment {
         Log.e("main", "onCreate2");
     }
 
+
+
     @Override
     public void onResume() {
         super.onResume();

@@ -34,6 +34,7 @@ import com.tum.orange.bluetoothmanagement.ConnectedThread;
 import com.tum.orange.constants.Constant;
 import com.tum.orange.fragment.Fragment_Data;
 import com.tum.orange.fragment.Fragment_DeviceList;
+import com.tum.orange.fragment.Fragment_File_List;
 import com.tum.orange.fragment.MyPreferenceFragment;
 
 import java.lang.reflect.Method;
@@ -66,6 +67,7 @@ public class MainActivity extends AppCompatActivity {
     private MyPreferenceFragment myPreferenceFragment;
     private ActionBarDrawerToggle toggle;
     private Fragment_DeviceList fragment_deviceList;
+    public Fragment_File_List fragment_file_list;
 
 
     public void setHandler(Handler handler) {
@@ -148,6 +150,7 @@ public class MainActivity extends AppCompatActivity {
         fragment_data = new Fragment_Data();
         myPreferenceFragment = new MyPreferenceFragment();
         fragment_deviceList = new Fragment_DeviceList();
+        fragment_file_list = new Fragment_File_List();
         //my_toolbar.setOverflowIcon(getResources().getDrawable(R.drawable.menu_overflow));
         my_toolbar.setNavigationIcon(R.drawable.menu_overflow);
         setSupportActionBar(my_toolbar);
@@ -165,8 +168,9 @@ public class MainActivity extends AppCompatActivity {
 
         getSupportFragmentManager().beginTransaction().add(R.id.frame_content, fragment_data).add
                 (R.id.frame_content, fragment_deviceList).add(R.id.frame_content,
-                myPreferenceFragment).hide(fragment_deviceList).hide(myPreferenceFragment).commit();
-
+                myPreferenceFragment).add(R.id.frame_content, fragment_file_list).hide
+                (fragment_deviceList).hide(myPreferenceFragment).hide
+                (fragment_file_list).commit();
 
 
         navigationView.getMenu().getItem(0).setChecked(true);
@@ -179,13 +183,18 @@ public class MainActivity extends AppCompatActivity {
                 switch (item.getItemId()) {
                     case R.id.nav_live_measurement:
                         getSupportFragmentManager().beginTransaction().hide
-                                (myPreferenceFragment).hide(fragment_deviceList)
+                                (myPreferenceFragment).hide(fragment_deviceList).hide
+                                (fragment_file_list)
                                 .show(fragment_data).commit();
 
 
                         drawerLayout.closeDrawers();
                         break;
                     case R.id.nav_data_representation:
+                        fragment_file_list.upData();
+                        getSupportFragmentManager().beginTransaction().hide(fragment_data).hide
+                                (fragment_deviceList).hide(myPreferenceFragment).show
+                                (fragment_file_list).commit();
                         drawerLayout.closeDrawers();
                         break;
                     case R.id.nav_device:
@@ -193,13 +202,15 @@ public class MainActivity extends AppCompatActivity {
                                         .class),
                                 Constant.REQUEST_DEVICE_INFO);*/
                         getSupportFragmentManager().beginTransaction().hide
-                                (myPreferenceFragment).hide(fragment_data)
+                                (myPreferenceFragment).hide(fragment_data).hide
+                                (fragment_file_list)
                                 .show(fragment_deviceList).commit();
                         drawerLayout.closeDrawers();
                         break;
                     case R.id.nav_setting:
                         getSupportFragmentManager().beginTransaction().hide
-                                (fragment_deviceList).hide(fragment_data)
+                                (fragment_deviceList).hide(fragment_data).hide
+                                (fragment_file_list)
                                 .show(myPreferenceFragment).commit();
                         drawerLayout.closeDrawers();
                         break;
@@ -239,7 +250,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-                getMenuInflater().inflate(R.menu.toolbar_menu, menu);
+        getMenuInflater().inflate(R.menu.toolbar_menu, menu);
 
         return true;
     }
@@ -278,6 +289,7 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             case R.id.save_Msmt:
                 fragment_data_handler.obtainMessage(Constant.BUTTON_SAVE_MSMT).sendToTarget();
+
                 return true;
             case R.id.clear:
                 //clear the chart

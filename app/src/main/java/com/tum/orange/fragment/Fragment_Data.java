@@ -275,7 +275,8 @@ public class Fragment_Data extends Fragment {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
+        //notify the listView update file list
+        mActivity.fragment_file_list.upData();
         Toast.makeText(mActivity.getApplicationContext(), "save file successfully", Toast
                 .LENGTH_SHORT).show();
 

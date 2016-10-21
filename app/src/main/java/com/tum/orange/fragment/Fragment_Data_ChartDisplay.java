@@ -80,8 +80,6 @@ public class Fragment_Data_ChartDisplay extends Fragment {
             data.addXValue(String.valueOf(i));
             String value = myDataBeanArrayList.get(i).getCurrentMeasure();
             float yValue = Float.parseFloat(value);
-            //System.out.println("yValue:" + yValue);
-            // float m= Float.parseFloat("30.00");
             Entry entry = new Entry(yValue, i);
             dataSet.addEntry(entry);
 

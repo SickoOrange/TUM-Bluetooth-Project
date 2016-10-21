@@ -358,7 +358,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    @Override
+   /* @Override
     public void onBackPressed() {
         showSnackBar(my_toolbar, "Do you want to finish APP?");
     }
@@ -374,6 +374,25 @@ public class MainActivity extends AppCompatActivity {
                     });
         }
         snackbar.show();
+    }*/
+
+    private Toast toast;
+
+    @Override
+    public void onBackPressed() {
+
+        if (toast == null) {
+            toast = Toast.makeText(this, "in press back again to finish the app!", Toast.LENGTH_SHORT);
+            toast.show();
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    toast = null;
+                }
+            }, 5000);
+        } else {
+            finishAffinity();
+        }
     }
 
     @Override

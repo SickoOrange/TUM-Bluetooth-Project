@@ -89,7 +89,6 @@ public class GuideActivity extends AppCompatActivity {
                 lastPosition = position;
                 System.out.println(lastPosition);
                 if (position == mList.size() - 1) {
-                    System.out.println("VISIBLE");
                     btn.setVisibility(View.VISIBLE);
                 } else {
                     btn.setVisibility(View.INVISIBLE);
@@ -110,8 +109,13 @@ public class GuideActivity extends AppCompatActivity {
                         .getDefaultSharedPreferences(GuideActivity.this);
                 defaultSharedPreferences.edit().putBoolean("isFirstStart", false).apply();
                 //go into MainActivity
-                startActivity(new Intent(GuideActivity.this, MainActivity.class));
-                finish();
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        startActivity(new Intent(GuideActivity.this, MainActivity.class));
+                        finish();
+                    }
+                }).start();
             }
         });
     }

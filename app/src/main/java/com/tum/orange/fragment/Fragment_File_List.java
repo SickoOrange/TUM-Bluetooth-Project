@@ -38,6 +38,10 @@ public class Fragment_File_List extends Fragment {
     public void onAttach(Context context) {
         super.onAttach(context);
         mActivity = (MainActivity) context;
+        file = new File(Environment.getExternalStorageDirectory(), Constant.serializablePath);
+        if (!file.exists()) {
+            file.mkdir();
+        }
     }
 
     @Override
@@ -49,10 +53,6 @@ public class Fragment_File_List extends Fragment {
     private void setFileName() {
         ArrayList<String> arrayList = new ArrayList<String>();
         System.out.println("upDataFileName");
-        file = new File(Environment.getExternalStorageDirectory(), Constant.serializablePath);
-        if (!file.exists()) {
-            file.mkdir();
-        }
 
         if (file.isDirectory()) {
             list = file.list();
@@ -94,6 +94,5 @@ public class Fragment_File_List extends Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        setFileName();
     }
 }

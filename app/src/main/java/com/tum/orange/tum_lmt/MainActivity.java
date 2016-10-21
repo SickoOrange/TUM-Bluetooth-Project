@@ -265,10 +265,10 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.action_device:
+            /*case R.id.action_device:
                 startActivityForResult(new Intent(getApplicationContext(), DeviceListActivity
                         .class), Constant.REQUEST_DEVICE_INFO);
-                return true;
+                return true;*/
             case R.id.start:
                 fragment_data_handler.obtainMessage(Constant.BUTTON_START).sendToTarget();
                 return true;

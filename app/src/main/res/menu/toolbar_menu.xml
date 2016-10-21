@@ -41,12 +41,12 @@
         android:icon="@drawable/clear"
         android:title="Clear"
         app:showAsAction="never"/>
-    <item
+<!--    <item
         android:id="@+id/action_device"
         android:icon="@drawable/deviceicon"
         android:title="Device"
         app:showAsAction="never"
-        />
+        />-->
 
 
 </menu>

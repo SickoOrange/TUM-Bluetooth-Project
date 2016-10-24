@@ -3,11 +3,11 @@
                   xmlns:app="http://schemas.android.com/apk/res-auto"
     >
 
-    <PreferenceCategory android:title="Bluetooth Device Management">
+  <!--  <PreferenceCategory android:title="Bluetooth Device Management">
         <Preference
             android:key="deviceManagement"
             android:summary="manage your bluetooth device connect"/>
-    </PreferenceCategory>
+    </PreferenceCategory>-->
 
     <PreferenceCategory android:title="Bluetooth Auto Connect">
         <SwitchPreference

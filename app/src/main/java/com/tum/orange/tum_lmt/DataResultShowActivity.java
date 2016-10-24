@@ -4,8 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.design.widget.TabLayout;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -14,6 +12,7 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.tum.orange.constants.Constant;
+import com.tum.orange.fragment.Fragment_Data_BarChart;
 import com.tum.orange.fragment.Fragment_Data_ChartDisplay;
 import com.tum.orange.fragment.Fragment_Data_RecyclerView;
 import com.tum.orange.javabean.MyDataBean;
@@ -40,6 +39,7 @@ public class DataResultShowActivity extends AppCompatActivity implements TabLayo
     private File file;
     private BufferedWriter bw;
     private ActionBar supportActionBar;
+    private Fragment_Data_BarChart fragment_data_barChart;
 
 
     @Override
@@ -69,6 +69,7 @@ public class DataResultShowActivity extends AppCompatActivity implements TabLayo
         tabLayout.setTabMode(TabLayout.MODE_FIXED);
         tabLayout.addTab(tabLayout.newTab().setText("Data"), true);
         tabLayout.addTab(tabLayout.newTab().setText("LineChart"));
+        tabLayout.addTab(tabLayout.newTab().setText("BarChart"));
         initDefaultFragment();
         tabLayout.setOnTabSelectedListener(this);
     }
@@ -76,11 +77,11 @@ public class DataResultShowActivity extends AppCompatActivity implements TabLayo
     private void initDefaultFragment() {
         fragment_data_recyclerView = new Fragment_Data_RecyclerView();
         fragment_data_chartDisplay = new Fragment_Data_ChartDisplay();
+        fragment_data_barChart = new Fragment_Data_BarChart();
 
-        FragmentManager supportFragmentManager = getSupportFragmentManager();
-        FragmentTransaction transaction = supportFragmentManager.beginTransaction();
-        transaction.replace(R.id.fragment, fragment_data_recyclerView);
-        transaction.commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragment,
+                fragment_data_recyclerView)
+                .commit();
     }
 
     public String getFileName() {
@@ -93,19 +94,17 @@ public class DataResultShowActivity extends AppCompatActivity implements TabLayo
         switch (tab.getPosition()) {
             case 0:
                 System.out.println("this is first tab");
-                FragmentManager supportFragmentManager1 = getSupportFragmentManager();
-                FragmentTransaction transaction1 = supportFragmentManager1.beginTransaction();
-                // transaction1.show(fragment_data_recyclerView);
-                transaction1.replace(R.id.fragment, fragment_data_recyclerView);
-                transaction1.commit();
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment,
+                        fragment_data_recyclerView).commit();
                 break;
             case 1:
                 System.out.println("this is second tab");
-                FragmentManager supportFragmentManager = getSupportFragmentManager();
-                FragmentTransaction transaction = supportFragmentManager.beginTransaction();
-                //transaction.hide(fragment_data_recyclerView);
-                transaction.replace(R.id.fragment, fragment_data_chartDisplay);
-                transaction.commit();
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment,
+                        fragment_data_chartDisplay).commit();
+                break;
+            case 2:
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment,
+                        fragment_data_barChart).commit();
                 break;
             default:
                 break;

@@ -16,7 +16,6 @@ import android.widget.Toast;
 import com.tum.orange.bluetoothmanagement.EmulatorThread;
 import com.tum.orange.constants.Constant;
 import com.tum.orange.tum_lmt.DataResultShowActivity;
-import com.tum.orange.tum_lmt.DeviceListActivity;
 import com.tum.orange.tum_lmt.MainActivity;
 import com.tum.orange.tum_lmt.R;
 
@@ -65,7 +64,7 @@ public class MyPreferenceFragment extends PreferenceFragmentCompat {
             file.mkdir();
         }
 
-        Preference deviceManagement = findPreference("deviceManagement");
+      /*  Preference deviceManagement = findPreference("deviceManagement");
         deviceManagement.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
@@ -73,7 +72,7 @@ public class MyPreferenceFragment extends PreferenceFragmentCompat {
                         Constant.REQUEST_DEVICE_INFO);
                 return false;
             }
-        });
+        });*/
 
         ListPreference filelist = (ListPreference) findPreference("filelist_preference");
         auto_connect_preference = findPreference("auto_connect_preference");

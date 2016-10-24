@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                tools:context="com.tum.orange.tum_lmt.DeviceListActivity">
+
+    <ExpandableListView
+        android:id="@+id/expandable_device_ListView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/device_search"
+        />
+
+
+    <android.support.design.widget.FloatingActionButton
+        android:elevation="20dp"
+        android:id="@+id/device_search"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerInParent="true"
+        android:src="@mipmap/icon_search"
+        android:background="@color/colorAccent"
+        android:layout_marginBottom="10dp"/>
+</RelativeLayout>

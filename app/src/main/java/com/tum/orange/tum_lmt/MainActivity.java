@@ -12,11 +12,14 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentTabHost;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -24,13 +27,14 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.TabHost;
 import android.widget.Toast;
 
 import com.tum.orange.bluetoothmanagement.ConnectThread;
 import com.tum.orange.bluetoothmanagement.ConnectedThread;
 import com.tum.orange.constants.Constant;
 import com.tum.orange.fragment.Fragment_Data;
+import com.tum.orange.fragment.Fragment_DeviceList;
+import com.tum.orange.fragment.Fragment_File_List;
 import com.tum.orange.fragment.MyPreferenceFragment;
 
 import java.lang.reflect.Method;
@@ -51,23 +55,25 @@ public class MainActivity extends AppCompatActivity {
             R.drawable.tab_center,
             R.drawable.tab_counter,
     };
-    private Class[] aClass = {Fragment_Data.class, MyPreferenceFragment.class};
 
-    // Fragment Tag
-    private String mFragmentTags[] = {
-            "0",
-            "1",
-    };
     private BluetoothDevice resultDevice;
     private BluetoothAdapter adapter;
     private BluetoothSocket btSocket;
     private Boolean isStarted = false;
     private SharedPreferences auto_connect_sharedPreference;
+    private DrawerLayout drawerLayout;
+    private NavigationView navigationView;
+    private Fragment_Data fragment_data;
+    private MyPreferenceFragment myPreferenceFragment;
+    private ActionBarDrawerToggle toggle;
+    private Fragment_DeviceList fragment_deviceList;
+    public Fragment_File_List fragment_file_list;
+
 
     public void setHandler(Handler handler) {
         fragment_data_handler = handler;
         getSharedPreferences("com.tum.orange.tum_lmt_preferences", MODE_PRIVATE).edit()
-                .putBoolean("emulator_mode_preference", false).commit();
+                .putBoolean("emulator_mode_preference", false).apply();
         auto_connect_sharedPreference = getSharedPreferences("com.tum.orange" +
                 ".tum_lmt_preferences", MODE_PRIVATE);
         boolean auto_connect_mode = auto_connect_sharedPreference.getBoolean
@@ -138,15 +144,89 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void init_view() {
+        drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        navigationView = (NavigationView) findViewById(R.id.navigation_view);
         my_toolbar = (Toolbar) findViewById(R.id.my_toolbar);
-        my_toolbar.setOverflowIcon(getResources().getDrawable(R.drawable.menu_overflow));
+        fragment_data = new Fragment_Data();
+        myPreferenceFragment = new MyPreferenceFragment();
+        fragment_deviceList = new Fragment_DeviceList();
+        fragment_file_list = new Fragment_File_List();
+        //my_toolbar.setOverflowIcon(getResources().getDrawable(R.drawable.menu_overflow));
+        my_toolbar.setNavigationIcon(R.drawable.menu_overflow);
         setSupportActionBar(my_toolbar);
         ActionBar actionBar = getSupportActionBar();
 
         if (actionBar != null) {
             actionBar.setTitle("No Connection");
+            actionBar.setDisplayHomeAsUpEnabled(true);
         }
-        mTabHost = (FragmentTabHost) findViewById(android.R.id.tabhost);
+
+        toggle = new ActionBarDrawerToggle(this, drawerLayout, my_toolbar,
+                R.string
+                        .open, R.string.close);
+        drawerLayout.addDrawerListener(toggle);
+
+        getSupportFragmentManager().beginTransaction().add(R.id.frame_content, fragment_data).add
+                (R.id.frame_content, fragment_deviceList).add(R.id.frame_content,
+                myPreferenceFragment).add(R.id.frame_content, fragment_file_list).hide
+                (fragment_deviceList).hide(myPreferenceFragment).hide
+                (fragment_file_list).commit();
+
+
+        navigationView.getMenu().getItem(0).setChecked(true);
+
+        navigationView.setNavigationItemSelectedListener(new NavigationView
+                .OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(MenuItem item) {
+                item.setChecked(true);
+                switch (item.getItemId()) {
+                    case R.id.nav_live_measurement:
+                        getSupportFragmentManager().beginTransaction().hide
+                                (myPreferenceFragment).hide(fragment_deviceList).hide
+                                (fragment_file_list)
+                                .show(fragment_data).commit();
+
+
+                        drawerLayout.closeDrawers();
+                        break;
+                    case R.id.nav_data_representation:
+                        fragment_file_list.upData();
+                        getSupportFragmentManager().beginTransaction().hide(fragment_data).hide
+                                (fragment_deviceList).hide(myPreferenceFragment).show
+                                (fragment_file_list).commit();
+                        drawerLayout.closeDrawers();
+                        break;
+                    case R.id.nav_device:
+                        /*startActivityForResult(new Intent(MainActivity.this, DeviceListActivity
+                                        .class),
+                                Constant.REQUEST_DEVICE_INFO);*/
+                        getSupportFragmentManager().beginTransaction().hide
+                                (myPreferenceFragment).hide(fragment_data).hide
+                                (fragment_file_list)
+                                .show(fragment_deviceList).commit();
+                        drawerLayout.closeDrawers();
+                        break;
+                    case R.id.nav_setting:
+                        getSupportFragmentManager().beginTransaction().hide
+                                (fragment_deviceList).hide(fragment_data).hide
+                                (fragment_file_list)
+                                .show(myPreferenceFragment).commit();
+                        drawerLayout.closeDrawers();
+                        break;
+
+                }
+                return false;
+            }
+        });
+
+
+       /* Resources resource = getBaseContext().getResources();
+        ColorStateList csl = resource.getColorStateList(R.color.navigation_menu_item_color);
+        navigationView.setItemTextColor(csl);*/
+
+
+       /* mTabHost = (FragmentTabHost) findViewById(android.R.id.tabhost);
         mTabHost.setup(this, getSupportFragmentManager(), R.id.tabcontent);
         mTabHost.getTabWidget().setDividerDrawable(null); // 去掉分割线
         for (int i = 0; i < mImages.length; i++) {
@@ -157,7 +237,7 @@ public class MainActivity extends AppCompatActivity {
             mTabHost.addTab(tabSpec, aClass[i], null);
 
             mTabHost.getTabWidget().getChildAt(i).setBackgroundResource(R.color.color_tabHost_bkg);
-        }
+        }*/
     }
 
     private View getImageView(int index) {
@@ -171,6 +251,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.toolbar_menu, menu);
+
         return true;
     }
 
@@ -184,10 +265,10 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.action_device:
+            /*case R.id.action_device:
                 startActivityForResult(new Intent(getApplicationContext(), DeviceListActivity
                         .class), Constant.REQUEST_DEVICE_INFO);
-                return true;
+                return true;*/
             case R.id.start:
                 fragment_data_handler.obtainMessage(Constant.BUTTON_START).sendToTarget();
                 return true;
@@ -208,6 +289,7 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             case R.id.save_Msmt:
                 fragment_data_handler.obtainMessage(Constant.BUTTON_SAVE_MSMT).sendToTarget();
+
                 return true;
             case R.id.clear:
                 //clear the chart
@@ -264,7 +346,7 @@ public class MainActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
     }
 
-    private void connectToRemoteDevice(BluetoothDevice resultDevice) {
+    public void connectToRemoteDevice(BluetoothDevice resultDevice) {
         if (mConnectThread != null) {
             mConnectThread.cancelConnect();
             mConnectThread = null;
@@ -276,7 +358,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    @Override
+   /* @Override
     public void onBackPressed() {
         showSnackBar(my_toolbar, "Do you want to finish APP?");
     }
@@ -292,6 +374,25 @@ public class MainActivity extends AppCompatActivity {
                     });
         }
         snackbar.show();
+    }*/
+
+    private Toast toast;
+
+    @Override
+    public void onBackPressed() {
+
+        if (toast == null) {
+            toast = Toast.makeText(this, "press back again to finish the app!", Toast.LENGTH_SHORT);
+            toast.show();
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    toast = null;
+                }
+            }, 5000);
+        } else {
+            finishAffinity();
+        }
     }
 
     @Override

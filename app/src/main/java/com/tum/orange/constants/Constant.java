@@ -28,6 +28,8 @@ public class Constant {
 
     public static final String CLEAR_TEXT = "0.00ms";
 
+    public static final String CLEAR_Symbo = "ms";
+
 
     public static final int REQUEST_DEVICE_INFO = 1001;
     public static final String preference_Path = "com.tum.orange" +

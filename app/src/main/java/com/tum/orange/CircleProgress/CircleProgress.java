@@ -49,6 +49,7 @@ public class CircleProgress extends View {
     public CircleProgress(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
         init(attrs, defStyle);
+
     }
 
     private void init(AttributeSet attrs, int defStyle) {
@@ -58,7 +59,8 @@ public class CircleProgress extends View {
         mPaint.setAntiAlias(true);
         mPaint.setStyle(Paint.Style.FILL);
 
-        TypedArray a = getContext().obtainStyledAttributes(attrs, R.styleable.CircleProgress, defStyle, 0);
+        TypedArray a = getContext().obtainStyledAttributes(attrs, R.styleable.CircleProgress,
+                defStyle, 0);
         int color1 = a.getColor(R.styleable.CircleProgress_color1, RED);
         int color2 = a.getColor(R.styleable.CircleProgress_color2, YELLOW);
         int color3 = a.getColor(R.styleable.CircleProgress_color3, BLUE);

@@ -23,8 +23,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class GuideActivity extends AppCompatActivity {
-    private int[] mImages = {R.drawable.guide1, R.drawable.guide2, R.drawable
-            .guide3, R.drawable.guide4, R.drawable.guide5};
+    private int[] mImages = {R.drawable.image1, R.drawable.image2, R.drawable
+            .image3, R.drawable.image4, R.drawable.image5,R.drawable.image6};
     private List<View> mList = new ArrayList<View>();
     private ViewPager vp;
     private ArrayList<View> viewPoints;
@@ -89,7 +89,6 @@ public class GuideActivity extends AppCompatActivity {
                 lastPosition = position;
                 System.out.println(lastPosition);
                 if (position == mList.size() - 1) {
-                    System.out.println("VISIBLE");
                     btn.setVisibility(View.VISIBLE);
                 } else {
                     btn.setVisibility(View.INVISIBLE);
@@ -110,8 +109,13 @@ public class GuideActivity extends AppCompatActivity {
                         .getDefaultSharedPreferences(GuideActivity.this);
                 defaultSharedPreferences.edit().putBoolean("isFirstStart", false).apply();
                 //go into MainActivity
-                startActivity(new Intent(GuideActivity.this, MainActivity.class));
-                finish();
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        startActivity(new Intent(GuideActivity.this, MainActivity.class));
+                        finish();
+                    }
+                }).start();
             }
         });
     }

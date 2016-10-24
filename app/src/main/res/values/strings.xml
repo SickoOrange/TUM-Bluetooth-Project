@@ -48,4 +48,5 @@
     <string name="title_activity_data_show">DataShowActivity</string>
     <string name="open">1</string>
     <string name="close">0</string>
+    <string name="ms">ms</string>
 </resources>

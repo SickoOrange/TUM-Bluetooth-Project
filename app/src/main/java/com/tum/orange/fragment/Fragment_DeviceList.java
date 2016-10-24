@@ -53,7 +53,6 @@ public class Fragment_DeviceList extends Fragment implements ExpandableListView
     private MyExpandableAdapter myExpandableAdapter;
     private ShapeLoadingDialog loadingDialog;
 
-
     private View mContainerView;
     private MainActivity mActivity;
     private FloatingActionButton floatingActionButton;

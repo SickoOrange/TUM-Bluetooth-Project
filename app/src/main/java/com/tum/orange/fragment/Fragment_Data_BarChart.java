@@ -68,8 +68,8 @@ public class Fragment_Data_BarChart extends Fragment {
     private BarData getBarData(int count, float range) {
         String minLabel;
         String maxLabel;
-        float minLabelValue;
-        float maxLabelValue;
+        int minLabelValue;
+        int maxLabelValue;
         String xLabel = null;
         ArrayList<Float> leftValue = new ArrayList<>();
         ArrayList<Float> rightValue = new ArrayList<>();
@@ -79,22 +79,22 @@ public class Fragment_Data_BarChart extends Fragment {
         ArrayList<String> xValues = new ArrayList<String>();
         for (int i = 0; i < count; i++) {
             if (i == count - 1) {
-                minLabelValue = Min + (i * xLabelInterval);
-                maxLabelValue = Max;
+                minLabelValue = (int) (Min + (i * xLabelInterval));
+                maxLabelValue = (int) Max+1;
                 minLabel = String.valueOf(minLabelValue);
                 maxLabel = String.valueOf(maxLabelValue);
                 xLabel = minLabel + "-" + maxLabel + " [ms]";
-                leftValue.add(minLabelValue);
-                rightValue.add(maxLabelValue);
+                leftValue.add((float) minLabelValue);
+                rightValue.add((float) maxLabelValue);
 
             } else {
-                minLabelValue = Min + (i * xLabelInterval);
-                maxLabelValue = Min + ((i + 1) * xLabelInterval);
+                minLabelValue = (int) (Min + (i * xLabelInterval));
+                maxLabelValue = (int) (Min + ((i + 1) * xLabelInterval));
                 minLabel = String.valueOf(minLabelValue);
                 maxLabel = String.valueOf(maxLabelValue);
                 xLabel = minLabel + "-" + maxLabel + " [ms]";
-                leftValue.add(minLabelValue);
-                rightValue.add(maxLabelValue);
+                leftValue.add((float) minLabelValue);
+                rightValue.add((float) maxLabelValue);
             }
             xValues.add(xLabel);
         }
@@ -172,7 +172,7 @@ public class Fragment_Data_BarChart extends Fragment {
         //xAxis.setSpaceBetweenLabels(2);
         barChart.getAxisRight().setEnabled(false);
 
-        barChart.getAxisLeft().setAxisMaxValue(100);
+       // barChart.getAxisLeft().setAxisMaxValue(100);
         barChart.getAxisLeft().setSpaceBottom(0);
         barChart.setOnChartValueSelectedListener(new OnChartValueSelectedListener() {
 

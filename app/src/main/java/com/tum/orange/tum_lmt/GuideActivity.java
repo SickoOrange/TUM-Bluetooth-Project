@@ -23,8 +23,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class GuideActivity extends AppCompatActivity {
-    private int[] mImages = {R.drawable.guide1, R.drawable.guide2, R.drawable
-            .guide3, R.drawable.guide4, R.drawable.guide5};
+    private int[] mImages = {R.drawable.image1, R.drawable.image2, R.drawable
+            .image3, R.drawable.image4, R.drawable.image5,R.drawable.image6};
     private List<View> mList = new ArrayList<View>();
     private ViewPager vp;
     private ArrayList<View> viewPoints;

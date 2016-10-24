@@ -20,15 +20,16 @@
         android:title="Reset"
         app:showAsAction="never"/>
     <item
-        android:id="@+id/lower_Sens"
-        android:icon="@drawable/minus"
-        android:title="Lower_Sens"
-        app:showAsAction="never"/>
-    <item
         android:id="@+id/higher_Sens"
         android:icon="@drawable/plus"
         android:title="Higher_Sens"
         app:showAsAction="never"/>
+    <item
+        android:id="@+id/lower_Sens"
+        android:icon="@drawable/minus"
+        android:title="Lower_Sens"
+        app:showAsAction="never"/>
+
     <item
         android:id="@+id/save_Msmt"
         android:icon="@drawable/save"

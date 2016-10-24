@@ -382,7 +382,7 @@ public class MainActivity extends AppCompatActivity {
     public void onBackPressed() {
 
         if (toast == null) {
-            toast = Toast.makeText(this, "in press back again to finish the app!", Toast.LENGTH_SHORT);
+            toast = Toast.makeText(this, "press back again to finish the app!", Toast.LENGTH_SHORT);
             toast.show();
             new Handler().postDelayed(new Runnable() {
                 @Override

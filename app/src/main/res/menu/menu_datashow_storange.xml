@@ -6,4 +6,10 @@
         android:orderInCategory="100"
         android:title="Export"
         app:showAsAction="always" />
+    <item
+        android:id="@+id/share"
+        android:orderInCategory="100"
+        android:title="Share"
+        android:icon="@drawable/ic_share_white_36dp"
+        app:showAsAction="always" />
 </menu>

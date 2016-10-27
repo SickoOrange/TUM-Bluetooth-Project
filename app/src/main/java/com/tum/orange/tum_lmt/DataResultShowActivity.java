@@ -154,6 +154,7 @@ public class DataResultShowActivity extends AppCompatActivity implements TabLayo
     }
 
     private void share() {
+
         Intent shareIntent = new Intent();
         shareIntent.setAction(Intent.ACTION_SEND);
         File filePath = new File(file, getFileName());

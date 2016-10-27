@@ -4,8 +4,8 @@
 * 这是一个TUM的Forschungspraxis项目，主要是开发一个APP 通过HC05蓝牙模块与Anduino单片机实现通讯，控制以及数据取回。
 
 ![image](https://github.com/SickoOrange/TUM-Bluetooth-Project/blob/master/GuideImage/GIF1.gif ) 
-![image](https://github.com/SickoOrange/TUM-Bluetooth-Project/blob/master/GuideImage/GIF2.gif ) 
-![image](https://github.com/SickoOrange/TUM-Bluetooth-Project/blob/master/GuideImage/GIF3.gif ) 
+[image](https://github.com/SickoOrange/TUM-Bluetooth-Project/blob/master/GuideImage/GIF2.gif ) 
+[image](https://github.com/SickoOrange/TUM-Bluetooth-Project/blob/master/GuideImage/GIF3.gif ) 
 
 #APP Function:
 * Bluetooth connect optimization

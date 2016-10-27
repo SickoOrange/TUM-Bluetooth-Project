@@ -1,6 +1,7 @@
 package com.tum.orange.tum_lmt;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.design.widget.TabLayout;
@@ -146,7 +147,27 @@ public class DataResultShowActivity extends AppCompatActivity implements TabLayo
             System.out.println("Save----------------");
             save();
         }
+        if (item.getItemId() == R.id.share) {
+            share();
+        }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void share() {
+        Intent shareIntent = new Intent();
+        shareIntent.setAction(Intent.ACTION_SEND);
+        File filePath = new File(file, getFileName());
+        if (!filePath.exists()) {
+            Toast.makeText(DataResultShowActivity.this, "File not exist, pls first Export on the " +
+                    "Phone", Toast.LENGTH_LONG
+            ).show();
+            return;
+        } else {
+            shareIntent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(filePath));
+            shareIntent.setType("text/plain");
+            startActivity(Intent.createChooser(shareIntent, "share the measurements"));
+        }
+
     }
 
 

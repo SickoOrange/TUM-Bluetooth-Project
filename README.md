@@ -3,6 +3,10 @@
 * this is a project from the TUM. Smart phone should connect to the Aduino MUC via HC 05 bluetooth module. The smart phone send the control command to Aduino and receive the measure data from the aduino. the receive data should be shown with the Chart.
 * 这是一个TUM的Forschungspraxis项目，主要是开发一个APP 通过HC05蓝牙模块与Anduino单片机实现通讯，控制以及数据取回。
 
+![image](https://github.com/SickoOrange/TUM-Bluetooth-Project/blob/master/GuideImage/GIF1.gif ) 
+![image](https://github.com/SickoOrange/TUM-Bluetooth-Project/blob/master/GuideImage/GIF2.gif ) 
+![image](https://github.com/SickoOrange/TUM-Bluetooth-Project/blob/master/GuideImage/GIF3.gif ) 
+
 #APP Function:
 * Bluetooth connect optimization
 * 蓝牙模块HC05的连接优化

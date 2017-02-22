@@ -8,7 +8,7 @@
 * recieve date should dynamic be shown in the line chart
 
 # start the app and connect to the bluetooth model
-![image](https://github.com/SickoOrange/TUM-Bluetooth-Project/blob/master/GuideImage/GIF1.gif ) 
+![image](https://github.com/SickoOrange/TUM-Bluetooth-Project/blob/master/GuideImage/app.gif ) 
 
 
 
